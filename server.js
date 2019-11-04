@@ -1,7 +1,9 @@
-const dotenv   = require('dotenv');
-const express  = require('express');
-const logger   = require('morgan');
-const passport = require('passport');
+const dotenv     = require('dotenv');
+const express    = require('express');
+const logger     = require('morgan');
+const passport   = require('passport');
+
+const authRouter = require('./routes/auth.js');
 
 dotenv.config({ silent: true });
 
@@ -14,8 +16,8 @@ app.use(logger('dev'));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-auth(passport);
-app.use(passport.initialize());
+// auth(passport);
+// app.use(passport.initialize());
 
 app.get('/', (req, res) => {
     res.render('index', {
