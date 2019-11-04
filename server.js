@@ -11,13 +11,15 @@ const app  = express();
 const PORT = process.argv[2] || process.env.PORT || 3000;
 
 app.use(logger('dev'));
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 auth(passport);
 app.use(passport.initialize());
 
 app.get('/', (req, res) => {
-    res.json({
-        status: 'session cookie not set'
+    res.render('index', {
+        value: 'session cookie not set'
     });
 });
 
