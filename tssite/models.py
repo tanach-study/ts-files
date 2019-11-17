@@ -2,21 +2,22 @@ from django.db import models
 
 
 class Teacher(models.Model):
-    title = models.TextField()
-    fname = models.TextField()
-    mname = models.TextField()
-    lname = models.TextField()
-    short_bio = models.TextField()
+    title = models.CharField(max_length=20)
+    fname = models.CharField(max_length=40)
+    mname = models.CharField(max_length=10, default=None, null=True, blank=True)
+    lname = models.CharField(max_length=40)
+    short_bio = models.CharField(max_length=256)
     long_bio = models.TextField()
-    image_url = models.TextField()
+    image_url = models.CharField(max_length=1024, null=True, blank=True)
+    image = models.FileField(upload_to='uploads/', null=True, blank=True)
+
+    def __str__(self):
+        if not self.mname:
+            return '{} {} {} {}'.format(self.title, self.fname, self.mname, self.lname)
+        return '{} {} {}'.format(self.title, self.fname, self.lname)
 
 
-class Teamim(models.Model):
-    reader = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    audio_url = models.TextField()
-
-
-class Classes(models.Model):
+class Class(models.Model):
     division = models.CharField(max_length=256)
     division_name = models.CharField(max_length=256)
     division_title = models.CharField(max_length=256)
@@ -52,10 +53,22 @@ class Classes(models.Model):
     end_chapter = models.CharField(max_length=256)
     end_verse = models.CharField(max_length=256)
     audio_url = models.CharField(max_length=1024)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    teamim = models.ForeignKey(Teamim, on_delete=models.CASCADE)
-    date = models.DateTimeField(null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
+    date = models.DateTimeField(null=True, blank=True)
     video_url = models.CharField(max_length=1024)
 
     def __str__(self):
-        return '{} {} {} {} {}'.format(self.division, self.segment, self.section, self.unit, self.part)
+        segment = self.segment_title
+        section = self.section.title()
+        unit = self.unit.title()
+        if self.division == 'parasha' or self.division == 'mishna':
+            return '{} - {}: {} {} {}'.format(self.division_title, self.segment_title, section, unit, self.part)
+        if not self.part:
+            return '{} - Sefer {}: Perek {}'.format(self.division_title, section, unit)
+        return '{} - Sefer {}: Perek {} Part {}'.format(self.division_title, section, unit, self.part)
+
+
+class Teamim(models.Model):
+    reader = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
+    audio = models.FileField(upload_to='uploads/', null=True, blank=True)
+    post = models.ForeignKey(Class, on_delete=models.CASCADE, null=True, blank=True)
