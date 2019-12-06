@@ -28,3 +28,5 @@ yarn-debug.log*
 .yarn-integrity
 
 venv/
+
+sftp-config.json
