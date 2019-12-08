@@ -6,4 +6,4 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the tssite index.")
+    return HttpResponse("<a href='/admin'>Click here for admin page</a>")

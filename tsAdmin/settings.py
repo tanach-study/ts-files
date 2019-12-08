@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'lachish.tanachstudy.com',
+    os.getenv('HOST'),
 ]
 
 
