@@ -136,7 +136,7 @@ class Class(models.Model):
         if not self.part:
             toreturn = f'{self.division_title} - Sefer {section}: Perek {unit}'
         toreturn = f'{self.division_title} - Sefer {section}: Perek {unit} Part {self.part}'
-        return f'{toreturn} --- {audio}'
+        return toreturn
 
 
 class Teamim(models.Model):
