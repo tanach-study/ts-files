@@ -34,7 +34,7 @@ class Teacher(models.Model):
             title = self.title.replace('.', '').lower()
             first = self.fname.lower()
             last = self.lname.lower()
-            string = f'{title}-{first}-{middle}-{last}'
+            string = f'{title}-{first}-{last}'
         return string
 
 
