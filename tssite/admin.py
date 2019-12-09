@@ -4,7 +4,13 @@ from django.contrib import admin
 from .models import Teacher, Teamim, Class
 
 class ClassAdmin(admin.ModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        update_fields = []
+        if change:
+            if form.initial['audio'] != form.cleaned_data['audio']:
+                update_fields.append('audio')
+
+        obj.save(update_fields=update_fields)
 
 
 ClassAdmin.search_fields=['division', 'segment', 'section', 'unit', 'part']

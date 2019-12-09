@@ -1,6 +1,9 @@
 from django.db import models
 from .validators import validate_file_extension
-from pydub import AudioSegment
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from tssite import client
 
 
 class Teacher(models.Model):
@@ -83,6 +86,23 @@ def get_class_audio_location(instance, filename):
 
     return path
 
+def create_transcoder_job(audio_field):
+    if client is None:
+        raise Exception("client not initialized")
+
+    s3_key = str(audio_field)
+
+    client.create_job(
+        PipelineId=settings.AWS_TRANSCODER_PIPELINE_ID,
+        Input={
+            'Key': s3_key,
+        },
+        Output={
+            'Key': s3_key,
+            'PresetId': settings.AWS_TRANSCODER_PRESET_ID,
+        }
+    )
+    print("created encoder job")
 
 class Class(models.Model):
     division = models.CharField(max_length=256)
@@ -137,6 +157,13 @@ class Class(models.Model):
             toreturn = f'{self.division_title} - Sefer {section}: Perek {unit}'
         toreturn = f'{self.division_title} - Sefer {section}: Perek {unit} Part {self.part}'
         return toreturn
+
+
+@receiver(post_save, sender=Class, dispatch_uid="update_class")
+def update_class(sender, instance, created, raw, using, update_fields, **kwargs):
+    if created or (update_fields and 'audio' in update_fields):
+        create_transcoder_job(instance.audio)
+
 
 
 class Teamim(models.Model):
