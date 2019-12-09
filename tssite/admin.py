@@ -7,8 +7,9 @@ class ClassAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         update_fields = []
         if change:
-            if form.initial['audio'] != form.cleaned_data['audio']:
-                update_fields.append('audio')
+            for key in form.initial:
+                if form.initial[key] != form.cleaned_data[key]:
+                    update_fields.append(key)
 
         obj.save(update_fields=update_fields)
 
