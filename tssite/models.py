@@ -149,16 +149,30 @@ class Class(models.Model):
         ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence']
 
     def __str__(self):
-        segment = self.segment_title
-        section = self.section.title()
-        unit = self.unit.title()
         audio = get_class_audio_location(self, '')
         toreturn = ''
-        if self.division == 'parasha' or self.division == 'mishna':
-            toreturn = f'{self.division_title} - {self.segment_title}: {section} {unit} {self.part}' 
-        if not self.part:
-            toreturn = f'{self.division_title} - Sefer {section}: Perek {unit}'
-        toreturn = f'{self.division_title} - Sefer {section}: Perek {unit} Part {self.part}'
+
+        if self.division == 'torah':
+            toreturn = f'Torah - Sefer {self.section_title} Parashat {self.unit_title}: Part {self.part}'
+        elif (
+            self.division == 'neviim_rishonim' or
+            self.division == 'neviim_aharonim' or
+            self.division == 'tere_asar' or
+            self.division == 'ketuvim'
+        ):
+            if self.part:
+                toreturn = f'{self.division_title} - Sefer {self.section_title}: Perek {self.unit.title()} Part {self.part}'
+            else:
+                toreturn = f'{self.division_title} - Sefer {self.section_title}: Perek {self.unit.title()}'
+
+        elif self.division == 'parasha':
+            if self.part:
+                toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()} {self.part}'
+            else:
+                toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()}'
+
+        elif self.division == 'mishna':
+            toreturn = f'{self.division_title} - {self.segment_title}: {self.section_title} Perek {self.unit.title()} Mishna {self.part}'
         return toreturn
 
 
