@@ -145,6 +145,9 @@ class Class(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     video_url = models.CharField(max_length=1024, null=True, blank=True)
 
+    class Meta:
+        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence']
+
     def __str__(self):
         segment = self.segment_title
         section = self.section.title()
