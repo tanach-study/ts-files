@@ -17,14 +17,14 @@ class Teacher(models.Model):
     image = models.FileField(upload_to='uploads/', null=True, blank=True)
 
     def __str__(self):
-        if not self.mname:
+        if self.mname:
             return '{} {} {} {}'.format(self.title, self.fname, self.mname, self.lname)
         return '{} {} {}'.format(self.title, self.fname, self.lname)
 
     @property
     def teacher_string(self):
         string = ''
-        if self.mname is not None and self.mname is not '':
+        if self.mname:
             title = self.title.replace('.', '').lower()
             first = self.fname.lower()
             middle = self.mname.replace('.', '').lower()
