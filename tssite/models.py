@@ -50,11 +50,11 @@ def get_class_audio_location(instance, filename):
     ):
         base = ''
         if instance.division == 'neviim_rishonim':
-            base = 'archives/Neviim%20Rishonim'
+            base = 'archives/Neviim Rishonim'
         elif instance.division == 'neviim_aharonim':
-            base = 'archives/Neviim%20Aharonim'
+            base = 'archives/Neviim Aharonim'
         elif instance.division == 'tere_asar':
-            base = 'archives/Tere%20Asar'
+            base = 'archives/Tere Asar'
 
         file = ''
         if instance.part is not None and instance.part is not '':
@@ -70,7 +70,7 @@ def get_class_audio_location(instance, filename):
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
-        path = f"{base}/{instance.section_title.replace(' ', '%20')}/{file}.mp3"
+        path = f"{base}/{instance.section_title}/{file}.mp3"
 
     elif instance.division == 'parasha':
         base = 'archives/parasha'
