@@ -140,7 +140,7 @@ class Class(models.Model):
     end_chapter = models.CharField(max_length=256, null=True, blank=True)
     end_verse = models.CharField(max_length=256, null=True, blank=True)
     audio_url = models.CharField(max_length=1024, null=True, blank=True)
-    audio = models.FileField(upload_to=get_class_audio_location, validators=[validate_file_extension], default=None, null=True)
+    audio = models.FileField(upload_to=get_class_audio_location, validators=[validate_file_extension], default=None, null=True, max_length=500)
     teacher = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
     date = models.DateTimeField(null=True, blank=True)
     video_url = models.CharField(max_length=1024, null=True, blank=True)
@@ -182,9 +182,57 @@ def update_class(sender, instance, created, raw, using, update_fields, **kwargs)
         create_transcoder_job(instance.audio)
 
 
+def get_teamim_audio_location(instance, filename):
+    instance = instance.post
+    path = ''
+    if instance.division == 'torah':
+        path = f'archives/Torah/{instance.section_title}/{instance.unit}-{instance.part}.mp3'
+    elif (
+        instance.division == 'neviim_rishonim' or
+        instance.division == 'neviim_aharonim' or
+        instance.division == 'tere_assar'
+    ):
+        base = ''
+        if instance.division == 'neviim_rishonim':
+            base = 'archives/Neviim Rishonim'
+        elif instance.division == 'neviim_aharonim':
+            base = 'archives/Neviim Aharonim'
+        elif instance.division == 'tere_assar':
+            base = 'archives/Tere Asar'
+
+        file = ''
+        if instance.part is not None and instance.part is not '':
+            file = f'{instance.section}-{instance.unit}{instance.part}'
+        else:
+            file = f'{instance.section}-{instance.unit}'
+        path = f'{base}/{instance.section.title()}/{file}.mp3'
+
+    elif instance.division == 'ketuvim':
+        base = 'archives/Ketuvim'
+        file = ''
+        if instance.part is not None and instance.part is not '':
+            file = f'{instance.section}-{instance.unit}{instance.part}'
+        else:
+            file = f'{instance.section}-{instance.unit}'
+        path = f"{base}/{instance.section_title}/{file}.mp3"
+
+    elif instance.division == 'parasha':
+        base = 'archives/parasha'
+        path = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}.mp3'
+
+    elif instance.division == 'mishna':
+        base = 'archives/mishna'
+        file = f'{instance.segment}-{instance.section}-{instance.unit}-{instance.part}-{instance.teacher.teacher_string}'
+        path = f'{base}/{instance.segment}/{instance.section}/{file}.mp3'
+
+    else:
+        raise Exception(f'division is invalid: {instance.division}')
+
+    return path
+
 
 class Teamim(models.Model):
     reader = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
-    audio = models.FileField(upload_to='uploads/', null=True, blank=True)
+    audio = models.FileField(upload_to=get_teamim_audio_location, null=True, blank=True, max_length=500)
     post = models.ForeignKey(Class, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
