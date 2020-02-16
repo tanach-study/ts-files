@@ -53,7 +53,7 @@ def get_class_audio_location(instance, filename):
             base = 'archives/Neviim Rishonim'
         elif instance.division == 'neviim_aharonim':
             base = 'archives/Neviim Aharonim'
-        elif instance.division == 'tere_asar':
+        elif instance.division == 'tere_asar' or instance.division == 'tere_assar':
             base = 'archives/Tere Asar'
 
         file = ''
@@ -82,7 +82,7 @@ def get_class_audio_location(instance, filename):
         path = f'{base}/{instance.segment}/{instance.section}/{file}.mp3'
 
     else:
-        raise Exception('invalid division')
+        raise Exception(f'division is invalid: {instance.division}')
 
     return path
 
