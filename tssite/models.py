@@ -184,7 +184,7 @@ def update_class(sender, instance, created, raw, using, update_fields, **kwargs)
 
 
 class Teamim(models.Model):
-    reader = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
+    reader = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
     audio = models.FileField(upload_to='uploads/', null=True, blank=True)
-    post = models.ForeignKey(Class, on_delete=models.CASCADE, null=True, blank=True)
+    post = models.ForeignKey(Class, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
