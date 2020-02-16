@@ -46,14 +46,14 @@ def get_class_audio_location(instance, filename):
     elif (
         instance.division == 'neviim_rishonim' or
         instance.division == 'neviim_aharonim' or
-        instance.division == 'tere_asar'
+        instance.division == 'tere_assar'
     ):
         base = ''
         if instance.division == 'neviim_rishonim':
             base = 'archives/Neviim Rishonim'
         elif instance.division == 'neviim_aharonim':
             base = 'archives/Neviim Aharonim'
-        elif instance.division == 'tere_asar' or instance.division == 'tere_assar':
+        elif instance.division == 'tere_assar':
             base = 'archives/Tere Asar'
 
         file = ''
