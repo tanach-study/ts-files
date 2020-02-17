@@ -11,15 +11,17 @@ def all(request):
     values = []
     all_classes = Class.objects.all()
     for c in all_classes:
-        teamim = []
-        for t in c.teamim_set.all():
-            teamim.append({
-                'reader_title': t.reader.title if t.reader.title is not '' else None,
-                'reader_fname': t.reader.fname if t.reader.fname is not '' else None,
-                'reader_mname': t.reader.mname if t.reader.mname is not '' else None,
-                'reader_lname': t.reader.lname if t.reader.lname is not '' else None,
-                'audio_url': t.audio.url,
-            })
+        teamim = None
+        if len(c.teamim_set.all()) > 0:
+            teamim = []
+            for t in c.teamim_set.all():
+                teamim.append({
+                    'reader_title': t.reader.title if t.reader.title is not '' else None,
+                    'reader_fname': t.reader.fname if t.reader.fname is not '' else None,
+                    'reader_mname': t.reader.mname if t.reader.mname is not '' else None,
+                    'reader_lname': t.reader.lname if t.reader.lname is not '' else None,
+                    'audio_url': t.audio.url,
+                })
         values.append({
             'division': c.division if c.division is not '' else None,
             'division_name': c.division_name if c.division_name is not '' else None,
