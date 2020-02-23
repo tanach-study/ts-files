@@ -9,19 +9,26 @@ def index(request):
 
 def all(request):
     values = []
+    teachers = Teacher.objects.all()
+    teachers_map = {}
+    for t in teachers:
+        teachers_map[t.id] = t
+
     all_classes = Class.objects.all()
     for c in all_classes:
         teamim = None
         if len(c.teamim_set.all()) > 0:
             teamim = []
             for t in c.teamim_set.all():
+                this_reader = teachers_map[t.reader_id]
                 teamim.append({
-                    'reader_title': t.reader.title if t.reader.title is not '' else None,
-                    'reader_fname': t.reader.fname if t.reader.fname is not '' else None,
-                    'reader_mname': t.reader.mname if t.reader.mname is not '' else None,
-                    'reader_lname': t.reader.lname if t.reader.lname is not '' else None,
+                    'reader_title': this_reader.title if this_reader.title is not '' else None,
+                    'reader_fname': this_reader.fname if this_reader.fname is not '' else None,
+                    'reader_mname': this_reader.mname if this_reader.mname is not '' else None,
+                    'reader_lname': this_reader.lname if this_reader.lname is not '' else None,
                     'audio_url': t.audio.url,
                 })
+        this_teacher = teachers_map[c.teacher_id]
         values.append({
             'division': c.division if c.division is not '' else None,
             'division_name': c.division_name if c.division_name is not '' else None,
@@ -60,13 +67,13 @@ def all(request):
             'audio_url': c.audio_url if c.audio_url is not '' else None,
             'audio': c.audio.url if c.audio else '',
             'teamim': teamim,
-            'teacher_title': c.teacher.title,
-            'teacher_fname': c.teacher.fname,
-            'teacher_mname': c.teacher.mname,
-            'teacher_lname': c.teacher.lname,
-            'teacher_short_bio': c.teacher.short_bio,
-            'teacher_long_bio': c.teacher.long_bio,
-            'teacher_image_url': c.teacher.image_url,
+            'teacher_title': this_teacher.title,
+            'teacher_fname': this_teacher.fname,
+            'teacher_mname': this_teacher.mname,
+            'teacher_lname': this_teacher.lname,
+            'teacher_short_bio': this_teacher.short_bio,
+            'teacher_long_bio': this_teacher.long_bio,
+            'teacher_image_url': this_teacher.image_url,
             'date': c.date,
             'video_url': c.video_url,
           })
