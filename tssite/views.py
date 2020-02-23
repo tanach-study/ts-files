@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Class, Teacher, Teamim
+from collections import defaultdict
 
 
 def index(request):
@@ -9,25 +10,27 @@ def index(request):
 
 def all(request):
     values = []
-    teachers = Teacher.objects.all()
+
     teachers_map = {}
-    for t in teachers:
+    for t in Teacher.objects.all():
         teachers_map[t.id] = t
+
+    teamim_map = defaultdict(list)
+    for t in Teamim.objects.all():
+        teamim_map[t.post_id].append(t)
 
     all_classes = Class.objects.all()
     for c in all_classes:
-        teamim = None
-        if len(c.teamim_set.all()) > 0:
-            teamim = []
-            for t in c.teamim_set.all():
-                this_reader = teachers_map[t.reader_id]
-                teamim.append({
-                    'reader_title': this_reader.title if this_reader.title is not '' else None,
-                    'reader_fname': this_reader.fname if this_reader.fname is not '' else None,
-                    'reader_mname': this_reader.mname if this_reader.mname is not '' else None,
-                    'reader_lname': this_reader.lname if this_reader.lname is not '' else None,
-                    'audio_url': t.audio.url,
-                })
+        teamim = []
+        for t in teamim_map[c.id]:
+            this_reader = teachers_map[t.reader_id]
+            teamim.append({
+                'reader_title': this_reader.title if this_reader.title is not '' else None,
+                'reader_fname': this_reader.fname if this_reader.fname is not '' else None,
+                'reader_mname': this_reader.mname if this_reader.mname is not '' else None,
+                'reader_lname': this_reader.lname if this_reader.lname is not '' else None,
+                'audio_url': t.audio.url,
+            })
         this_teacher = teachers_map[c.teacher_id]
         values.append({
             'division': c.division if c.division is not '' else None,
@@ -66,7 +69,7 @@ def all(request):
             'end_verse': c.end_verse if c.end_verse is not '' else None,
             'audio_url': c.audio_url if c.audio_url is not '' else None,
             'audio': c.audio.url if c.audio else '',
-            'teamim': teamim,
+            'teamim': teamim if teamim else None,
             'teacher_title': this_teacher.title,
             'teacher_fname': this_teacher.fname,
             'teacher_mname': this_teacher.mname,
