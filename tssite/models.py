@@ -148,6 +148,31 @@ class Class(models.Model):
     class Meta:
         ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence']
 
+
+    def get_location(self):
+        toreturn = ''
+
+        if self.division == 'torah':
+            toreturn = f'/parasha-study/perakim/{self.section}/{self.unit}?part={self.part}'
+        elif (
+            self.division == 'neviim_rishonim' or
+            self.division == 'neviim_aharonim' or
+            self.division == 'tere_assar' or
+            self.division == 'ketuvim'
+        ):
+            if self.part:
+                toreturn = f'/tanach-study/perakim/{self.section}/{self.unit}?part={self.part}'
+            else:
+                toreturn = f'/tanach-study/perakim/{self.section}/{self.unit}'
+
+        elif self.division == 'parasha':
+            toreturn = f'/parasha-plus-study/sefarim/{self.segment}/{self.section}?part={self.unit}'
+
+        elif self.division == 'mishna':
+            toreturn = f'/mishna-study/perek/{self.segment}/{self.section}/{self.unit}?part={self.part}'
+        return toreturn
+
+
     def __str__(self):
         audio = get_class_audio_location(self, '')
         toreturn = ''
@@ -157,7 +182,7 @@ class Class(models.Model):
         elif (
             self.division == 'neviim_rishonim' or
             self.division == 'neviim_aharonim' or
-            self.division == 'tere_asar' or
+            self.division == 'tere_assar' or
             self.division == 'ketuvim'
         ):
             if self.part:
