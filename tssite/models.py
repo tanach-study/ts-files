@@ -5,6 +5,16 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from tssite import client
 
+masechetot_by_seder = [
+    ('Zeraim', (
+            ('shabbat', 'Shabbat'),
+        )
+    ),
+    ('Moed', (
+            ('berachot', 'Berachot'),
+        )
+    ),
+]
 
 class Teacher(models.Model):
     title = models.CharField(max_length=20)
@@ -261,3 +271,56 @@ class Teamim(models.Model):
     audio = models.FileField(upload_to=get_teamim_audio_location, null=True, blank=True, max_length=500)
     post = models.ForeignKey(Class, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
+
+class ShasSedarim(models.TextChoices):
+    ZERAIM = 'zeraim', 'Zeraim'
+    MOED = 'moed', 'Moed'
+    NASHIM = 'nashim', 'Nashim'
+    NEZIKIN = 'nezikin', 'Nezikin'
+    KADASHIM = 'kadashim', 'Kadashim'
+    TAHAROT = 'taharot', 'Taharot'
+
+
+class TalmudSponsor(models.Model):
+    line_one = models.CharField(max_length=1024)
+    line_two = models.CharField(max_length=1024, blank=True, null=True)
+    line_three = models.CharField(max_length=1024, blank=True, null=True)
+
+    def __str__(self):
+        s = ''
+        if self.line_one:
+            s = s + ' ' + self.line_one
+        if self.line_two:
+            s = s + ' ' + self.line_two
+        if self.line_three:
+            s = s + ' ' + self.line_three
+        return s
+
+
+def get_talmud_audio_location(instance, filename):
+    base = 'archives/talmud'
+    file = f'{instance.seder}-{instance.masechet}-{instance.daf}{instance.amud}-{instance.teacher.teacher_string}'
+    path = f'{base}/{instance.seder}/{instance.masechet}/{file}.mp3'
+    return path
+
+
+class TalmudStudy(models.Model):
+    AMUD_CHOICES = [('a', 'a'), ('b', 'b')]
+    MASECHET_CHOICES = masechetot_by_seder
+
+    seder = models.CharField(max_length=12, choices=ShasSedarim.choices)
+    seder_sponsor = models.ForeignKey(TalmudSponsor, related_name='+', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+    seder_sequence = models.IntegerField(null=True, blank=True)
+    masechet = models.CharField(max_length=50, choices=MASECHET_CHOICES)
+    masechet_sponsor = models.ForeignKey(TalmudSponsor, related_name='+', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+    masechet_sequence = models.IntegerField(null=True, blank=True)
+    daf = models.IntegerField()
+    daf_sponsor = models.ForeignKey(TalmudSponsor, related_name='+', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+    amud = models.CharField(max_length=1, choices=AMUD_CHOICES)
+    amud_sponsor = models.ForeignKey(TalmudSponsor, related_name='+', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+
+    audio = models.FileField(upload_to=get_talmud_audio_location, validators=[validate_file_extension], default=None, null=True, max_length=500)
+    teacher = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
+    date = models.DateTimeField(null=True, blank=True)
+
+    models.UniqueConstraint(fields=['masechet', 'daf', 'amud'], name='unique_daf_amud_per_masechet')
