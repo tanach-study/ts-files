@@ -321,6 +321,6 @@ class TalmudStudy(models.Model):
 
     audio = models.FileField(upload_to=get_talmud_audio_location, validators=[validate_file_extension], default=None, null=True, max_length=500)
     teacher = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateTimeField()
 
     models.UniqueConstraint(fields=['masechet', 'daf', 'amud'], name='unique_daf_amud_per_masechet')
