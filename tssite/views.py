@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import Class, Teacher, Teamim
+from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy
 from collections import defaultdict
 
 
@@ -79,6 +79,56 @@ def all(request):
             'teacher_image_url': this_teacher.image_url,
             'date': c.date,
             'video_url': c.video_url,
+          })
+
+    talmud_sponsors_map = {}
+    for s in TalmudSponsor.objects.all():
+        talmud_sponsors_map[s.id] = str(s)
+
+    talmud_classes = TalmudStudy.objects.all()
+    for c in talmud_classes:
+        this_teacher = teachers_map[c.teacher_id]
+        values.append({
+            'division': 'talmud',
+            'division_name': None,
+            'division_title': 'Talmud',
+            'division_sponsor': None,
+            'division_sequence': 7,
+            'segment': c.seder,
+            'segment_name': 'Seder'
+            'segment_title': c.seder,
+            'segment_sponsor': talmud_sponsors_map[c.seder_sponsor] if c.seder_sponsor is not '' else None,
+            'segment_sequence': c.seder_sequence if c.seder_sequence is not '' else None,
+            'section': c.masechet,
+            'section_name': 'Masechet'
+            'section_title': c.masechet,
+            'section_sponsor': talmud_sponsors_map[c.masechet_sponsor] if c.masechet_sponsor is not '' else None,
+            'section_sequence': c.masechet_sequence if c.masechet_sequence is not '' else None,
+            'unit': c.daf,
+            'unit_name': 'Daf'
+            'unit_title': c.daf,
+            'unit_sponsor': talmud_sponsors_map[c.daf_sponsor] if c.daf_sponsor is not '' else None,
+            'unit_sequence': c.daf_sequence if c.daf_sequence is not '' else None,
+            'part': c.amud,
+            'part_name': 'Amud'
+            'part_title': c.amud,
+            'part_sponsor': talmud_sponsors_map[c.amud_sponsor] if c.amud_sponsor is not '' else None,
+            'part_sequence': c.amud_sequence if c.amud_sequence is not '' else None,
+            'series': 'first',
+            'series_name': ''
+            'series_title': '',
+            'series_sponsor': '',
+            'series_sequence': '',
+            'audio': c.audio.url if c.audio else '',
+            'teamim': '',
+            'teacher_title': this_teacher.title,
+            'teacher_fname': this_teacher.fname,
+            'teacher_mname': this_teacher.mname,
+            'teacher_lname': this_teacher.lname,
+            'teacher_short_bio': this_teacher.short_bio,
+            'teacher_long_bio': this_teacher.long_bio,
+            'teacher_image_url': this_teacher.image_url,
+            'date': c.date,
           })
     values = [{k: v for k, v in obj.items() if v is not None} for obj in values]
     return JsonResponse(values, safe=False)
