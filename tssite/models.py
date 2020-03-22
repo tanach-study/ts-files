@@ -321,3 +321,12 @@ class TalmudStudy(models.Model):
     date = models.DateTimeField()
 
     models.UniqueConstraint(fields=['masechet', 'daf', 'amud'], name='unique_daf_amud_per_masechet')
+
+    def __str__(self):
+        return f'Seder {self.seder.title()} Masechet {self.masechet.title()} Daf {self.daf}'
+
+
+@receiver(post_save, sender=TalmudStudy, dispatch_uid='update_talmud_study')
+def update_talmud_study(sender, instance, created, raw, using, update_fields, **kwargs):
+    if created or (update_fields and 'audio' in update_fields):
+        create_transcoder_job(instance.audio)
