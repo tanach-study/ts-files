@@ -95,27 +95,27 @@ def all(request):
             'division_sponsor': None,
             'division_sequence': 7,
             'segment': c.seder,
-            'segment_name': 'Seder'
+            'segment_name': 'Seder',
             'segment_title': c.seder,
             'segment_sponsor': talmud_sponsors_map[c.seder_sponsor] if c.seder_sponsor is not '' else None,
             'segment_sequence': c.seder_sequence if c.seder_sequence is not '' else None,
             'section': c.masechet,
-            'section_name': 'Masechet'
+            'section_name': 'Masechet',
             'section_title': c.masechet,
             'section_sponsor': talmud_sponsors_map[c.masechet_sponsor] if c.masechet_sponsor is not '' else None,
             'section_sequence': c.masechet_sequence if c.masechet_sequence is not '' else None,
             'unit': c.daf,
-            'unit_name': 'Daf'
+            'unit_name': 'Daf',
             'unit_title': c.daf,
             'unit_sponsor': talmud_sponsors_map[c.daf_sponsor] if c.daf_sponsor is not '' else None,
             'unit_sequence': c.daf_sequence if c.daf_sequence is not '' else None,
             'part': c.amud,
-            'part_name': 'Amud'
+            'part_name': 'Amud',
             'part_title': c.amud,
             'part_sponsor': talmud_sponsors_map[c.amud_sponsor] if c.amud_sponsor is not '' else None,
             'part_sequence': c.amud_sequence if c.amud_sequence is not '' else None,
             'series': 'first',
-            'series_name': ''
+            'series_name': '',
             'series_title': '',
             'series_sponsor': '',
             'series_sequence': '',
