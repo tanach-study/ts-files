@@ -325,6 +325,9 @@ class TalmudStudy(models.Model):
     def __str__(self):
         return f'Seder {self.seder.title()} Masechet {self.masechet.title()} Daf {self.daf}'
 
+    def get_location(self):
+        return f'/talmud-study/dapim/{self.seder}/{self.masechet}/{self.daf}'
+
 
 @receiver(post_save, sender=TalmudStudy, dispatch_uid='update_talmud_study')
 def update_talmud_study(sender, instance, created, raw, using, update_fields, **kwargs):
