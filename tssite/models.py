@@ -156,7 +156,7 @@ class Class(models.Model):
     video_url = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
-        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence']
+        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence', '-date']
 
 
     def get_location(self):

@@ -11,7 +11,7 @@ class RSSNachFeed(Feed):
     def items(self):
         return Class.objects.filter(
             Q(division='neviim_rishonim') | Q(division='neviim_aharonim') | Q(division='tere_assar') | Q(division='ketuvim')
-        ).order_by('-date')[:10]
+        ).order_by('division_sequence', 'section_sequence', 'unit_sequence', 'part_sequence').order_by('date')[:10]
 
     def item_title(self, item):
         return str(item)
