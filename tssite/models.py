@@ -7,11 +7,11 @@ from tssite import client
 
 masechetot_by_seder = [
     ('Zeraim', (
-            ('shabbat', 'Shabbat'),
+            ('berachot', 'Berachot'),
         )
     ),
     ('Moed', (
-            ('berachot', 'Berachot'),
+            ('shabbat', 'Shabbat'),
         )
     ),
 ]
