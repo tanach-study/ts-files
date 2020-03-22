@@ -299,13 +299,12 @@ class TalmudSponsor(models.Model):
 
 def get_talmud_audio_location(instance, filename):
     base = 'archives/talmud'
-    file = f'{instance.seder}-{instance.masechet}-{instance.daf}{instance.amud}-{instance.teacher.teacher_string}'
+    file = f'{instance.seder}-{instance.masechet}-{instance.daf}-{instance.teacher.teacher_string}'
     path = f'{base}/{instance.seder}/{instance.masechet}/{file}.mp3'
     return path
 
 
 class TalmudStudy(models.Model):
-    AMUD_CHOICES = [('a', 'a'), ('b', 'b')]
     MASECHET_CHOICES = masechetot_by_seder
 
     seder = models.CharField(max_length=12, choices=ShasSedarim.choices)
@@ -316,8 +315,6 @@ class TalmudStudy(models.Model):
     masechet_sequence = models.IntegerField(null=True, blank=True)
     daf = models.IntegerField()
     daf_sponsor = models.ForeignKey(TalmudSponsor, related_name='+', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
-    amud = models.CharField(max_length=1, choices=AMUD_CHOICES)
-    amud_sponsor = models.ForeignKey(TalmudSponsor, related_name='+', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
     audio = models.FileField(upload_to=get_talmud_audio_location, validators=[validate_file_extension], default=None, null=True, max_length=500)
     teacher = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True)
