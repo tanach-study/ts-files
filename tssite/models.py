@@ -1,8 +1,6 @@
 from django.db import models
 from .validators import validate_file_extension
 from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from tssite import client
 
 masechetot_by_seder = [
@@ -94,11 +92,12 @@ def get_class_audio_location(instance, filename):
     else:
         raise Exception(f'division is invalid: {instance.division}')
 
+    print(path)
     return path
 
 def create_transcoder_job(audio_field):
     if client is None:
-        raise Exception("client not initialized")
+        raise Exception('client not initialized')
 
     s3_key = str(audio_field)
 
@@ -112,7 +111,7 @@ def create_transcoder_job(audio_field):
             'PresetId': settings.AWS_TRANSCODER_PRESET_ID,
         }
     )
-    print("created encoder job")
+    print('created transcoder job')
 
 class Class(models.Model):
     division = models.CharField(max_length=256)
@@ -209,12 +208,6 @@ class Class(models.Model):
         elif self.division == 'mishna':
             toreturn = f'{self.division_title} - {self.segment_title}: {self.section_title} Perek {self.unit.title()} Mishna {self.part}'
         return toreturn
-
-
-@receiver(post_save, sender=Class, dispatch_uid="update_class")
-def update_class(sender, instance, created, raw, using, update_fields, **kwargs):
-    if created or (update_fields and 'audio' in update_fields):
-        create_transcoder_job(instance.audio)
 
 
 def get_teamim_audio_location(instance, filename):
@@ -327,9 +320,3 @@ class TalmudStudy(models.Model):
 
     def get_location(self):
         return f'/talmud-study/dapim/{self.seder}/{self.masechet}/{self.daf}'
-
-
-@receiver(post_save, sender=TalmudStudy, dispatch_uid='update_talmud_study')
-def update_talmud_study(sender, instance, created, raw, using, update_fields, **kwargs):
-    if created or (update_fields and 'audio' in update_fields):
-        create_transcoder_job(instance.audio)
