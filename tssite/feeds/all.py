@@ -26,6 +26,9 @@ class RSSAllFeed(Feed):
     def item_pubdate(self, item):
         return item[1].date
 
+    def item_author_name(self, item):
+        return item[1].teacher.__str__()
+
     def item_description(self, tup):
         description = ""
         item = tup[1]
@@ -59,6 +62,11 @@ class RSSAllFeed(Feed):
     def item_link(self, tup):
         host = 'https://tanachstudy.com'
         return f'{host}{tup[1].get_location()}'
+
+    def item_enclosure_url(self, item):
+        return f'https://cdn.tanachstudy.com/{item[1].audio}'
+
+    item_enclosure_mime_type = 'audio/mpeg'
 
 
 class AtomAllFeed(RSSAllFeed):
