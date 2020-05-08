@@ -23,6 +23,9 @@ class RSSAllFeed(Feed):
     def item_title(self, item):
         return str(item[1])
 
+    def item_pubdate(self, item):
+        return item[1].date
+
     def item_description(self, tup):
         description = ""
         item = tup[1]
