@@ -46,21 +46,6 @@ class Teacher(models.Model):
         return string
 
 
-class Sponsor(models.Model):
-    line_one = models.CharField(max_length=1024)
-    line_two = models.CharField(max_length=1024, blank=True, null=True)
-    line_three = models.CharField(max_length=1024, blank=True, null=True)
-
-    def __str__(self):
-        s = ''
-        if self.line_one:
-            s = s + ' ' + self.line_one
-        if self.line_two:
-            s = s + ' ' + self.line_two
-        if self.line_three:
-            s = s + ' ' + self.line_three
-        return s
-
 
 def get_class_audio_location(instance, filename):
     path = ''
