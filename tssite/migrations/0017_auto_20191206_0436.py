@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import tssite.models.common
+import tssite.models
 import tssite.validators
 
 
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='class',
             name='audio',
-            field=models.FileField(default=None, null=True, upload_to=tssite.models.common.get_class_audio_location, validators=[tssite.validators.validate_file_extension]),
+            field=models.FileField(default=None, null=True, upload_to=tssite.models.get_class_audio_location, validators=[tssite.validators.validate_file_extension]),
         ),
         migrations.AlterField(
             model_name='teamim',

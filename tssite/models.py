@@ -1,5 +1,5 @@
 from django.db import models
-from tssite.validators import validate_file_extension
+from .validators import validate_file_extension
 from django.conf import settings
 from tssite import client
 
@@ -92,6 +92,7 @@ def get_class_audio_location(instance, filename):
     else:
         raise Exception(f'division is invalid: {instance.division}')
 
+    print(path)
     return path
 
 def create_transcoder_job(audio_field):

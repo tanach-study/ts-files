@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='teamim',
             name='audio',
-            field=models.FileField(blank=True, null=True, upload_to=tssite.models.common.get_teamim_audio_location),
+            field=models.FileField(blank=True, null=True, upload_to=tssite.models.get_teamim_audio_location),
         ),
     ]

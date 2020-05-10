@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('masechet_sequence', models.IntegerField(blank=True, null=True)),
                 ('daf', models.IntegerField()),
                 ('amud', models.CharField(choices=[('a', 'a'), ('b', 'b')], max_length=1)),
-                ('audio', models.FileField(default=None, max_length=500, null=True, upload_to=tssite.models.common.get_talmud_audio_location, validators=[tssite.validators.validate_file_extension])),
+                ('audio', models.FileField(default=None, max_length=500, null=True, upload_to=tssite.models.get_talmud_audio_location, validators=[tssite.validators.validate_file_extension])),
                 ('date', models.DateTimeField(blank=True, null=True)),
                 ('amud_sponsor', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_DEFAULT, related_name='+', to='tssite.TalmudSponsor')),
                 ('daf_sponsor', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_DEFAULT, related_name='+', to='tssite.TalmudSponsor')),
