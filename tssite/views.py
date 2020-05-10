@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy
+from .models.common import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy
 from collections import defaultdict
 
 

@@ -1,7 +1,7 @@
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.db.models import Q
-from tssite.models import TalmudStudy, Class
+from tssite.models.common import TalmudStudy, Class
 
 
 class RSSAllFeed(Feed):

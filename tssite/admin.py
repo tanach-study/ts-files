@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Teacher, Teamim, Class, TalmudSponsor, TalmudStudy
-from .models import create_transcoder_job
+from .models.common import Teacher, Teamim, Class, TalmudSponsor, TalmudStudy
+from .models.common import create_transcoder_job
 
 class ClassAdmin(admin.ModelAdmin):
     search_fields=['division', 'segment', 'section', 'unit', 'part']

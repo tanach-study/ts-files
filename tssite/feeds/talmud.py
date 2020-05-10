@@ -1,6 +1,6 @@
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
-from tssite.models import TalmudStudy
+from tssite.models.common import TalmudStudy
 
 
 class RSSTalmudFeed(Feed):
