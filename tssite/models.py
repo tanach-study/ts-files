@@ -92,7 +92,6 @@ def get_class_audio_location(instance, filename):
     else:
         raise Exception(f'division is invalid: {instance.division}')
 
-    print(path)
     return path
 
 def create_transcoder_job(audio_field):
@@ -119,7 +118,7 @@ class Class(models.Model):
     division_title = models.CharField(max_length=256, null=True, blank=True)
     division_sponsor = models.CharField(max_length=256, null=True, blank=True)
     division_sequence = models.CharField(max_length=256, null=True, blank=True)
-    segment = models.CharField(max_length=256)
+    segment = models.CharField(max_length=256, null=True, blank=True)
     segment_name = models.CharField(max_length=256, null=True, blank=True)
     segment_title = models.CharField(max_length=256, null=True, blank=True)
     segment_sponsor = models.CharField(max_length=256, null=True, blank=True)
