@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.db.models import Q
@@ -11,13 +12,29 @@ class RSSAllFeed(Feed):
 
     def items(self):
         items = []
+        for torah in Class.objects.exclude(date__isnull=True).filter(division_sequence=1, date__lte=datetime.datetime.now())[:500]:
+            items.append((torah.division, torah))
+
+        for neviim_rishonim in Class.objects.exclude(date__isnull=True).filter(division_sequence=2, date__lte=datetime.datetime.now())[:500]:
+            items.append((neviim_rishonim.division, neviim_rishonim))
+
+        for neviim_aharonim in Class.objects.exclude(date__isnull=True).filter(division_sequence=3, date__lte=datetime.datetime.now())[:500]:
+            items.append((neviim_aharonim.division, neviim_aharonim))
+
+        for tere_assar in Class.objects.exclude(date__isnull=True).filter(division_sequence=4, date__lte=datetime.datetime.now())[:500]:
+            items.append((tere_assar.division, tere_assar))
+
+        for ketuvim in Class.objects.exclude(date__isnull=True).filter(division_sequence=5, date__lte=datetime.datetime.now())[:500]:
+            items.append((ketuvim.division, ketuvim))
+
+        for mishna in Class.objects.exclude(date__isnull=True).filter(division_sequence=6, date__lte=datetime.datetime.now())[:500]:
+            items.append((mishna.division, mishna))
+
+        for parasha in Class.objects.exclude(date__isnull=True).filter(division_sequence=7, date__lte=datetime.datetime.now())[:500]:
+            items.append((parasha.division, parasha))
+
         for i in TalmudStudy.objects.all().order_by('-date')[:500]:
             items.append(("talmud", i))
-
-        others = Class.objects.exclude(date__isnull=True).order_by('division_sequence', 'section_sequence', 'unit_sequence', 'part_sequence').order_by('date')[:500]
-
-        for i in others:
-            items.append((i.division, i))
         return items
 
     def item_title(self, item):
