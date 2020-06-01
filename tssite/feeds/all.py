@@ -15,6 +15,9 @@ class RSSAllFeed(Feed):
         for torah in Class.objects.exclude(date__isnull=True).filter(division_sequence=1, date__lte=datetime.datetime.now())[:500]:
             items.append((torah.division, torah))
 
+        for parasha in Class.objects.exclude(date__isnull=True).filter(division_sequence=7, date__lte=datetime.datetime.now())[:500]:
+            items.append((parasha.division, parasha))
+
         for neviim_rishonim in Class.objects.exclude(date__isnull=True).filter(division_sequence=2, date__lte=datetime.datetime.now())[:500]:
             items.append((neviim_rishonim.division, neviim_rishonim))
 
@@ -29,9 +32,6 @@ class RSSAllFeed(Feed):
 
         for mishna in Class.objects.exclude(date__isnull=True).filter(division_sequence=6, date__lte=datetime.datetime.now())[:500]:
             items.append((mishna.division, mishna))
-
-        for parasha in Class.objects.exclude(date__isnull=True).filter(division_sequence=7, date__lte=datetime.datetime.now())[:500]:
-            items.append((parasha.division, parasha))
 
         for i in TalmudStudy.objects.all().order_by('-date')[:500]:
             items.append(("talmud", i))
