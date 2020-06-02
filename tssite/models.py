@@ -315,7 +315,7 @@ class TalmudStudy(models.Model):
     models.UniqueConstraint(fields=['masechet', 'daf', 'amud'], name='unique_daf_amud_per_masechet')
 
     def __str__(self):
-        return f'Seder {self.seder.title()} Masechet {self.masechet.title()} Daf {self.daf}'
+        return f'Masechet {self.masechet.title()} Daf {self.daf} with {str(self.teacher)}'
 
     def get_location(self):
         return f'/talmud-study/dapim/{self.seder}/{self.masechet}/{self.daf}'

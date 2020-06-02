@@ -33,7 +33,7 @@ class RSSAllFeed(Feed):
         for mishna in Class.objects.exclude(date__isnull=True).filter(division_sequence=6, date__lte=datetime.datetime.now())[:500]:
             items.append((mishna.division, mishna))
 
-        for i in TalmudStudy.objects.all().order_by('-date')[:500]:
+        for i in TalmudStudy.objects.all().order_by('-date', '-teacher')[:500]:
             items.append(("talmud", i))
         return items
 

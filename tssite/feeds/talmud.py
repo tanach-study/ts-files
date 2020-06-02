@@ -9,7 +9,7 @@ class RSSTalmudFeed(Feed):
     description = "Talmud Study is an initiative to promote the independent study of the Talmud Bavli through a web-based platform and weekly class. Our program aims to provide the Jewish community with immediate access to Torah knowledge in the form of a daily e-mail/podcast to complete and understand the Talmud with the Daf Yomi cycle. Talmud Study hopes to broaden Torah learning, to increase knowledge of our Jewish history, heighten our Yirat Shamayim, Ahavat Hashem, and strengthen our personal as well as our national identity."
 
     def items(self):
-        return TalmudStudy.objects.all().order_by('-date')[:500]
+        return TalmudStudy.objects.all().order_by('-date', '-teacher')[:500]
 
     def item_title(self, item):
         return str(item)
