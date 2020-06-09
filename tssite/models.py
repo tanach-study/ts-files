@@ -154,7 +154,7 @@ class Class(models.Model):
     video_url = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
-        ordering = ['-series_sequence', '-division_sequence', '-segment_sequence', '-section_sequence', '-unit_sequence', '-part_sequence', '-date']
+        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence', '-date']
 
 
     def get_location(self):
@@ -194,9 +194,9 @@ class Class(models.Model):
             self.division == 'ketuvim'
         ):
             if self.part:
-                toreturn = f'{self.division_title} - Sefer {self.section_title}: Perek {self.unit.title()} Part {self.part}'
+                toreturn = f'Tanach - Sefer {self.section_title}: Perek {self.unit.title()} Part {self.part}'
             else:
-                toreturn = f'{self.division_title} - Sefer {self.section_title}: Perek {self.unit.title()}'
+                toreturn = f'Tanach - Sefer {self.section_title}: Perek {self.unit.title()}'
 
         elif self.division == 'parasha':
             if self.part:
@@ -318,4 +318,5 @@ class TalmudStudy(models.Model):
         return f'Masechet {self.masechet.title()} Daf {self.daf} with {str(self.teacher)}'
 
     def get_location(self):
-        return f'/talmud-study/dapim/{self.seder}/{self.masechet}/{self.daf}'
+        teacher = str(self.teacher).lower().replace('.', '').replace(' ', '-')
+        return f'/talmud-study/dapim/{self.seder}/{self.masechet}/{self.daf}?{teacher}'

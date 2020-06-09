@@ -51,9 +51,8 @@ class RSSAllFeed(Feed):
         item = tup[1]
         title = str(item)
         teacher = str(item.teacher)
-        image = ''
+        class_title = ''
         if tup[0] == 'talmud':
-            image = 'https://cdn.tanachstudy.com/assets/images/logo.png'
             seder = item.seder.title()
             masechet = item.masechet.title()
             link = item.get_location()
@@ -61,64 +60,64 @@ class RSSAllFeed(Feed):
             masechet_sponsor = '' if not item.masechet_sponsor else item.masechet_sponsor
             daf_sponsor = '' if not item.daf_sponsor else item.daf_sponsor
             if seder_sponsor:
-                description = f'Seder {seder}<br />{seder_sponsor}'
+                description = f'{description}<br />Seder {seder}<br />{seder_sponsor}'
             else:
-                description = f'Seder {seder}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Seder {seder}<br /><i>Sponsorship available</i>'
             if masechet_sponsor:
-                description = f'Masechet {masechet}<br />{masechet_sponsor}'
+                description = f'{description}<br />Masechet {masechet}<br />{masechet_sponsor}'
             else:
-                description = f'Masechet {masechet}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Masechet {masechet}<br /><i>Sponsorship available</i>'
             if daf_sponsor:
-                description = f'Daf {item.daf}<br />{daf_sponsor}'
+                description = f'{description}<br />Daf {item.daf}<br />{daf_sponsor}'
             else:
-                description = f'Daf {item.daf}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Daf {item.daf}<br /><i>Sponsorship available</i>'
         elif tup[0] == 'parasha':
-            image = 'https://cdn.tanachstudy.com/assets/images/parasha-study-plus-logo.png'
             if item.section_sponsor:
-                description = f'Sefer {item.section_title}<br />{item.section_sponsor}'
+                description = f'{description}<br />Sefer {item.section_title}<br />{item.section_sponsor}'
             else:
-                description = f'Sefer {item.section_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Sefer {item.section_title}<br /><i>Sponsorship available</i>'
             if item.unit_sponsor:
-                description = f'Parashat {item.unit_title}<br />{item.unit_sponsor}'
+                description = f'{description}<br />Parashat {item.unit_title}<br />{item.unit_sponsor}'
             else:
-                description = f'Parashat {item.unit_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Parashat {item.unit_title}<br /><i>Sponsorship available</i>'
         elif tup[0] == 'torah':
-            image = 'https://cdn.tanachstudy.com/assets/images/parasha-study-logo.png'
+            class_title = item.part_title
             if item.section_sponsor:
-                description = f'Sefer {item.section_title}<br />{item.section_sponsor}'
+                description = f'{description}<br />Sefer {item.section_title}<br />{item.section_sponsor}'
             else:
-                description = f'Sefer {item.section_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Sefer {item.section_title}<br /><i>Sponsorship available</i>'
             if item.unit_sponsor:
-                description = f'Parashat {item.unit_title}<br />{item.unit_sponsor}'
+                description = f'{description}<br />Parashat {item.unit_title}<br />{item.unit_sponsor}'
             else:
-                description = f'Parashat {item.unit_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Parashat {item.unit_title}<br /><i>Sponsorship available</i>'
         elif tup[0] == 'neviim_rishonim' or tup[0] == 'neviim_aharonim' or tup[0] == 'tere_assar' or tup[0] == 'ketuvim':
-            image = 'https://cdn.tanachstudy.com/assets/images/logo.png'
+            class_title = item.unit_title
             if item.section_sponsor:
-                description = f'Sefer {item.section_title}<br />{item.section_sponsor}'
+                description = f'{description}<br />Sefer {item.section_title}<br />{item.section_sponsor}'
             else:
-                description = f'Sefer {item.section_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Sefer {item.section_title}<br /><i>Sponsorship available</i>'
             if item.unit_sponsor:
-                description = f'Perek {item.unit}<br />{item.unit_sponsor}'
+                description = f'{description}<br />Perek {item.unit}<br />{item.unit_sponsor}'
         elif tup[0] == 'mishna':
-            image = 'https://cdn.tanachstudy.com/assets/images/mishna-study-logo.png'
-            description = f'In Loving Memory of Mr. Ovadia Buddy Sutton A"H<br />'
+            class_title = item.part_title
+            description = f'{description}<br />In Loving Memory of Mr. Ovadia Buddy Sutton A"H<br />'
             if item.segment_sponsor:
-                description = f'Seder {item.segment_title}<br />{item.segment_sponsor}'
+                description = f'{description}<br />Seder {item.segment_title}<br />{item.segment_sponsor}'
             else:
-                description = f'Seder {item.segment_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Seder {item.segment_title}<br /><i>Sponsorship available</i>'
             if item.section_sponsor:
-                description = f'Masechet {item.section_title}<br />{item.section_sponsor}'
+                description = f'{description}<br />Masechet {item.section_title}<br />{item.section_sponsor}'
             else:
-                description = f'Masechet {item.section_title}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Masechet {item.section_title}<br /><i>Sponsorship available</i>'
             if item.unit_sponsor:
-                description = f'Perek {item.unit}<br />{item.unit_sponsor}'
+                description = f'{description}<br />Perek {item.unit}<br />{item.unit_sponsor}'
             else:
-                description = f'Perek {item.unit}<br /><i>Sponsorship available</i>'
+                description = f'{description}<br />Perek {item.unit}<br /><i>Sponsorship available</i>'
         else:
             raise Exception(f'unsupported division {tup[0]}')
 
-        # description = f'<img src="{image}" style="height:25px;" /><br />{description}'
+        if class_title != '':
+            return f'<b>{class_title}</b><br />{description}<br /><audio controls=""><source src="https://cdn.tanachstudy.com/{item.audio}"></audio>'
         return f'{description}<br /><audio controls=""><source src="https://cdn.tanachstudy.com/{item.audio}"></audio>'
 
     def item_link(self, tup):
