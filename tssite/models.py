@@ -158,7 +158,7 @@ class Class(models.Model):
     video_url = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
-        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence', '-date']
+        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence', 'series_sequence', '-date']
 
 
     def get_location(self):
@@ -203,8 +203,8 @@ class Class(models.Model):
                 toreturn = f'Tanach - Sefer {self.section_title}: Perek {self.unit.title()}'
 
         elif self.division == 'parasha':
-            if self.part:
-                toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()} {self.part}'
+            if self.series is not None:
+                toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()} ({self.series.title()})'
             else:
                 toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()}'
 
