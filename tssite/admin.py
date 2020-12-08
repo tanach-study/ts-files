@@ -5,7 +5,7 @@ from .models import Teacher, Teamim, Class, TalmudSponsor, TalmudStudy
 from .models import create_transcoder_job
 
 class ClassAdmin(admin.ModelAdmin):
-    search_fields=['division', 'segment', 'section', 'unit', 'part']
+    search_fields=['division', 'segment', 'section', 'unit', 'part', 'series']
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
