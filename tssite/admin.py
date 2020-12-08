@@ -36,8 +36,12 @@ class TalmudStudyAdmin(admin.ModelAdmin):
                 create_transcoder_job(obj.audio)
 
 
+class TeamimAdmin(admin.ModelAdmin):
+    raw_id_fields = ('post', 'reader',)
+
+
 admin.site.register(Teacher)
-admin.site.register(Teamim)
+admin.site.register(Teamim, TeamimAdmin)
 admin.site.register(Class, ClassAdmin)
 admin.site.register(TalmudSponsor)
 admin.site.register(TalmudStudy, TalmudStudyAdmin)
