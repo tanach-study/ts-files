@@ -267,6 +267,9 @@ class Teamim(models.Model):
     audio = models.FileField(upload_to=get_teamim_audio_location, null=True, blank=True, max_length=500)
     post = models.ForeignKey(Class, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
+    def __str__(self):
+        return f'{self.post} Read By {self.reader}'
+
 
 class ShasSedarim(models.TextChoices):
     ZERAIM = 'zeraim', 'Zeraim'
