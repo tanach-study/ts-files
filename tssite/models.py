@@ -82,7 +82,11 @@ def get_class_audio_location(instance, filename):
 
     elif instance.division == 'parasha':
         base = 'archives/parasha'
-        path = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}.mp3'
+        common = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}'
+        if instance.series is not None and instance.series is not 'first':
+            path = f'{common}-{instance.series}-{instance.teacher.teacher_string}.mp3'
+        else:
+            path = f'{common}-{instance.teacher.teacher_string}.mp3'
 
     elif instance.division == 'mishna':
         base = 'archives/mishna'
