@@ -82,7 +82,11 @@ def get_class_audio_location(instance, filename):
 
     elif instance.division == 'parasha':
         base = 'archives/parasha'
-        path = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}.mp3'
+        common = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}'
+        if instance.series is not None and instance.series is not 'first':
+            path = f'{common}-{instance.series}-{instance.teacher.teacher_string}.mp3'
+        else:
+            path = f'{common}-{instance.teacher.teacher_string}.mp3'
 
     elif instance.division == 'mishna':
         base = 'archives/mishna'
@@ -154,7 +158,7 @@ class Class(models.Model):
     video_url = models.CharField(max_length=1024, null=True, blank=True)
 
     class Meta:
-        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence', '-date']
+        ordering = ['series_sequence', 'division_sequence', 'segment_sequence', 'section_sequence', 'unit_sequence', 'part_sequence', 'series_sequence', '-date']
 
 
     def get_location(self):
@@ -199,8 +203,8 @@ class Class(models.Model):
                 toreturn = f'Tanach - Sefer {self.section_title}: Perek {self.unit.title()}'
 
         elif self.division == 'parasha':
-            if self.part:
-                toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()} {self.part}'
+            if self.series is not None:
+                toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()} ({self.series.title()})'
             else:
                 toreturn = f'{self.division.title()} - {self.segment_title}: {self.section_title} {self.unit.title()}'
 
@@ -213,7 +217,7 @@ def get_teamim_audio_location(instance, filename):
     instance = instance.post
     path = ''
     if instance.division == 'torah':
-        path = f'archives/Torah/{instance.section_title}/{instance.unit}-{instance.part}.mp3'
+        path = f'archives/Torah/{instance.section_title}/recordings/{instance.unit}-{instance.part}-teamim.mp3'
     elif (
         instance.division == 'neviim_rishonim' or
         instance.division == 'neviim_aharonim' or
@@ -232,7 +236,7 @@ def get_teamim_audio_location(instance, filename):
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
-        path = f'{base}/{instance.section.title()}/{file}.mp3'
+        path = f'{base}/{instance.section.title()}/recordings/{file}-teamim.mp3'
 
     elif instance.division == 'ketuvim':
         base = 'archives/Ketuvim'
@@ -241,16 +245,16 @@ def get_teamim_audio_location(instance, filename):
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
-        path = f"{base}/{instance.section_title}/{file}.mp3"
+        path = f"{base}/{instance.section_title}/recordings/{file}-teamim.mp3"
 
     elif instance.division == 'parasha':
         base = 'archives/parasha'
-        path = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}.mp3'
+        path = f'{base}/{instance.segment}/recordings/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}-teamim.mp3'
 
     elif instance.division == 'mishna':
         base = 'archives/mishna'
         file = f'{instance.segment}-{instance.section}-{instance.unit}-{instance.part}-{instance.teacher.teacher_string}'
-        path = f'{base}/{instance.segment}/{instance.section}/{file}.mp3'
+        path = f'{base}/{instance.segment}/{instance.section}/recordings/{file}-teamim.mp3'
 
     else:
         raise Exception(f'division is invalid: {instance.division}')
@@ -262,6 +266,9 @@ class Teamim(models.Model):
     reader = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
     audio = models.FileField(upload_to=get_teamim_audio_location, null=True, blank=True, max_length=500)
     post = models.ForeignKey(Class, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.post} Read By {self.reader}'
 
 
 class ShasSedarim(models.TextChoices):
