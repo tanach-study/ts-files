@@ -217,7 +217,7 @@ def get_teamim_audio_location(instance, filename):
     instance = instance.post
     path = ''
     if instance.division == 'torah':
-        path = f'archives/Torah/{instance.section_title}/{instance.unit}-{instance.part}.mp3'
+        path = f'archives/Torah/{instance.section_title}/recordings/{instance.unit}-{instance.part}-teamim.mp3'
     elif (
         instance.division == 'neviim_rishonim' or
         instance.division == 'neviim_aharonim' or
@@ -236,7 +236,7 @@ def get_teamim_audio_location(instance, filename):
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
-        path = f'{base}/{instance.section.title()}/{file}.mp3'
+        path = f'{base}/{instance.section.title()}/recordings/{file}-teamim.mp3'
 
     elif instance.division == 'ketuvim':
         base = 'archives/Ketuvim'
@@ -245,16 +245,16 @@ def get_teamim_audio_location(instance, filename):
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
-        path = f"{base}/{instance.section_title}/{file}.mp3"
+        path = f"{base}/{instance.section_title}/recordings/{file}-teamim.mp3"
 
     elif instance.division == 'parasha':
         base = 'archives/parasha'
-        path = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}.mp3'
+        path = f'{base}/{instance.segment}/recordings/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}-teamim.mp3'
 
     elif instance.division == 'mishna':
         base = 'archives/mishna'
         file = f'{instance.segment}-{instance.section}-{instance.unit}-{instance.part}-{instance.teacher.teacher_string}'
-        path = f'{base}/{instance.segment}/{instance.section}/{file}.mp3'
+        path = f'{base}/{instance.segment}/{instance.section}/recordings/{file}-teamim.mp3'
 
     else:
         raise Exception(f'division is invalid: {instance.division}')
