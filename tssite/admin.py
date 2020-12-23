@@ -38,6 +38,7 @@ class TalmudStudyAdmin(admin.ModelAdmin):
 
 
 class TeamimAdmin(admin.ModelAdmin):
+    search_fields = ['post', 'reader']
     raw_id_fields = ('post', 'reader',)
     list_display = ('post', 'reader',)
 
