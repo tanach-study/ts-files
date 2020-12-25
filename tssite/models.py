@@ -264,7 +264,7 @@ def get_teamim_audio_location(instance, filename):
 
 class Teamim(models.Model):
     reader = models.ForeignKey(Teacher, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
-    audio = models.FileField(upload_to=get_teamim_audio_location, null=True, blank=True, max_length=500)
+    audio = models.FileField(upload_to=get_teamim_audio_location, default=None, null=True, blank=True, max_length=500)
     post = models.ForeignKey(Class, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
     def __str__(self):
