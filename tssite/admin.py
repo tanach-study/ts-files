@@ -42,6 +42,15 @@ class TeamimAdmin(admin.ModelAdmin):
     raw_id_fields = ('post', 'reader',)
     list_display = ('post', 'reader',)
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if 'audio' in form.changed_data and obj.audio:
+            if change:
+                print('creating encoder job for existing object', str(obj))
+            else:
+                print('creating encoder job for new object', str(obj))
+            create_transcoder_job(obj.audio)
+
 
 admin.site.register(Teacher)
 admin.site.register(Teamim, TeamimAdmin)
