@@ -214,50 +214,51 @@ class Class(models.Model):
 
 
 def get_teamim_audio_location(instance, filename):
-    instance = instance.post
     path = ''
-    if instance.division == 'torah':
-        path = f'archives/Torah/{instance.section_title}/recordings/{instance.unit}-{instance.part}-teamim.mp3'
+    reader_string = instance.reader.teacher_string
+    if instance.post.division == 'torah':
+        path = f'archives/Torah/{instance.post.section_title}/recordings/{reader_string}-{instance.post.unit}-{instance.post.part}-teamim.mp3'
     elif (
-        instance.division == 'neviim_rishonim' or
-        instance.division == 'neviim_aharonim' or
-        instance.division == 'tere_assar'
+        instance.post.division == 'neviim_rishonim' or
+        instance.post.division == 'neviim_aharonim' or
+        instance.post.division == 'tere_assar'
     ):
         base = ''
-        if instance.division == 'neviim_rishonim':
+        if instance.post.division == 'neviim_rishonim':
             base = 'archives/Neviim Rishonim'
-        elif instance.division == 'neviim_aharonim':
+        elif instance.post.division == 'neviim_aharonim':
             base = 'archives/Neviim Aharonim'
-        elif instance.division == 'tere_assar':
+        elif instance.post.division == 'tere_assar':
             base = 'archives/Tere Asar'
 
         file = ''
-        if instance.part is not None and instance.part is not '':
-            file = f'{instance.section}-{instance.unit}{instance.part}'
+        if instance.post.part is not None and instance.post.part is not '':
+            file = f'{instance.post.section}-{instance.post.unit}{instance.post.part}'
         else:
-            file = f'{instance.section}-{instance.unit}'
-        path = f'{base}/{instance.section.title()}/recordings/{file}-teamim.mp3'
+            file = f'{instance.post.section}-{instance.post.unit}'
+        path = f'{base}/{instance.post.section.title()}/recordings/{reader_string}-{file}-teamim.mp3'
 
-    elif instance.division == 'ketuvim':
+    elif instance.post.division == 'ketuvim':
         base = 'archives/Ketuvim'
         file = ''
-        if instance.part is not None and instance.part is not '':
-            file = f'{instance.section}-{instance.unit}{instance.part}'
+        if instance.post.part is not None and instance.post.part is not '':
+            file = f'{instance.post.section}-{instance.post.unit}{instance.post.part}'
         else:
-            file = f'{instance.section}-{instance.unit}'
-        path = f"{base}/{instance.section_title}/recordings/{file}-teamim.mp3"
+            file = f'{instance.post.section}-{instance.post.unit}'
+        path = f"{base}/{instance.post.section_title}/recordings/{reader_string}-{file}-teamim.mp3"
 
-    elif instance.division == 'parasha':
+    elif instance.post.division == 'parasha':
         base = 'archives/parasha'
-        path = f'{base}/{instance.segment}/recordings/{instance.segment}-{instance.section}-{instance.unit}-{instance.teacher.teacher_string}-teamim.mp3'
+        path = f'{base}/{instance.post.segment}/recordings/{reader_string}-{instance.post.segment}-{instance.post.section}-{instance.post.unit}-teamim.mp3'
 
-    elif instance.division == 'mishna':
+    elif instance.post.division == 'mishna':
         base = 'archives/mishna'
-        file = f'{instance.segment}-{instance.section}-{instance.unit}-{instance.part}-{instance.teacher.teacher_string}'
-        path = f'{base}/{instance.segment}/{instance.section}/recordings/{file}-teamim.mp3'
+        # TODO(joey): remove teacher_string, add reader_string
+        file = f'{instance.post.segment}-{instance.post.section}-{instance.post.unit}-{instance.post.part}-{instance.post.teacher.teacher_string}'
+        path = f'{base}/{instance.post.segment}/{instance.post.section}/recordings/{file}-teamim.mp3'
 
     else:
-        raise Exception(f'division is invalid: {instance.division}')
+        raise Exception(f'division is invalid: {instance.post.division}')
 
     return path
 
