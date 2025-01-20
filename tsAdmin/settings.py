@@ -25,13 +25,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+host = os.getenv('HOST')
 
-ALLOWED_HOSTS = [
-    os.getenv('HOST'),
+ALLOWED_HOSTS = [host]
+
+CSRF_TRUSTED_ORIGINS = [
+    f'https://{host}',
+    f'http://{host}',
 ]
 
+# security.W018
+DEBUG = os.getenv('DEBUG')
+
+# security.W016
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
 
 # Application definition
 
@@ -75,7 +82,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tsAdmin.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -89,7 +95,6 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
