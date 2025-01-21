@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy, Schedule
 from collections import defaultdict
-
+from hdate import HDate
 
 def index(request):
     return HttpResponse("<a href='/admin'>Click here for admin page</a>")
@@ -183,13 +183,12 @@ def schedule(request, schedule_id):
                 print(f'skipping {skipped_days} days due to pause: {pause}')
                 curr_date = start_date + datetime.timedelta(days=date_iterator)
 
-        # always skip saturdays
-        if curr_date.weekday() == 5: # Monday = 0; Sunday = 6
+        # always skip saturdays and yom tov
+        hebrew_date = HDate(curr_date, diaspora=True)
+        if curr_date.weekday() == 5 or hebrew_date.is_yom_tov: # Monday = 0; Sunday = 6
             date_iterator += 1
             curr_date = start_date + datetime.timedelta(days=date_iterator)
             continue
-
-        # TODO(joey): skip holidays
 
         # output the class with the date
         c = classes[class_iterator]
