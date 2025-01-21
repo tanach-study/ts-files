@@ -14,4 +14,7 @@ urlpatterns = [
     path('feeds/atom/talmud-study', AtomTalmudFeed()),
     path('feeds/rss/all', RSSAllFeed()),
     path('feeds/atom/all', AtomAllFeed()),
+
+    path('schedules', views.schedules, name='schedules'),
+    path('schedule/<uuid:schedule_id>', views.schedule, name='schedule'),
 ]

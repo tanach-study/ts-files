@@ -1,6 +1,7 @@
+import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy
+from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy, Schedule
 from collections import defaultdict
 
 
@@ -132,3 +133,71 @@ def all(request):
           })
     values = [{k: v for k, v in obj.items() if v is not None} for obj in values]
     return JsonResponse(values, safe=False)
+
+
+def schedules(request):
+    html = '<h1>Schedules</h1>\n<ul>\n'
+    for s in Schedule.objects.all():
+        html += f'<li><a href="/schedule/{s.id}">{s.name}</a></li>\n'
+    html += '</ul>\n'
+    return HttpResponse(html)
+
+def schedule(request, schedule_id):
+    s = Schedule.objects.filter(id=schedule_id).get()
+    start_date = s.start_date
+    today = datetime.date.today()
+    diff = today - start_date
+    print(type(start_date), start_date, diff.days)
+
+    classes = Class.objects
+    # show perakim starting with neviim rishonim (division=2)...
+    classes = classes.filter(division_sequence__gte=2)
+    # ...through ketuvim (division=5), inclusive
+    classes = classes.filter(division_sequence__lte=5)
+    # TODO(joey): only show one class if the perek has multiple parts
+    # classes = classes.filter(part='')
+    # introductions should be counted on the same day as chapter 1
+    classes = classes.exclude(unit='0')
+    # only get the number of classes between the start date and today
+    classes = classes[:diff.days]
+
+    html = f'<h1>Items for Schedule: {s}</h1>\n<ul>\n'
+    date_iterator = 0
+    class_iterator = 0
+    curr_date = start_date + datetime.timedelta(days=date_iterator)
+
+    schedule_pauses = s.schedulepause_set.all()
+    print("schedule_pauses:", schedule_pauses)
+    while curr_date <= today and class_iterator < len(classes):
+        print("curr_date:", curr_date, "date_iterator:", date_iterator, "class_iterator:", class_iterator)
+        # get the next date to display
+
+        # skip any date in a SchedulePause
+        for pause in schedule_pauses:
+            if pause.start_date == curr_date:
+                pause_dur = pause.end_date - pause.start_date
+                skipped_days = pause_dur.days
+                if skipped_days == 0:
+                    skipped_days = 1
+                date_iterator += skipped_days
+                print(f'skipping {skipped_days} days due to pause: {pause}')
+                curr_date = start_date + datetime.timedelta(days=date_iterator)
+
+        # always skip saturdays
+        if curr_date.weekday() == 5: # Monday = 0; Sunday = 6
+            date_iterator += 1
+            curr_date = start_date + datetime.timedelta(days=date_iterator)
+            continue
+
+        # TODO(joey): skip holidays
+
+        # output the class with the date
+        c = classes[class_iterator]
+        html += f'<li>Date: {curr_date}; Class: {c}</li>\n'
+
+        date_iterator += 1
+        class_iterator += 1
+        curr_date = start_date + datetime.timedelta(days=date_iterator)
+
+    html += '</ul>\n'
+    return HttpResponse(html)
