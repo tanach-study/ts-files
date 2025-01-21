@@ -144,6 +144,7 @@ def schedule(request, schedule_id):
     s = Schedule.objects.filter(id=schedule_id).get()
     date_class_tuples = s.get_classes()
     html = f'<h1>Items for Schedule: {s}</h1>\n<ul>\n'
+    html += f'<a href="/feeds/rss/schedule/{s.id}" target="blank">RSS Feed for this schedule</a><br><br>\n'
     for dc in date_class_tuples:
         html += f'<li>Date: {dc[0]}; Class: {dc[1]}</li>\n'
     html += '</ul>\n'
