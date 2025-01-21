@@ -335,6 +335,9 @@ class Schedule(models.Model):
     name = models.CharField(max_length=256)
     start_date = models.DateField()
 
+    class Meta:
+        ordering = ['start_date', 'name']
+
     def __str__(self):
         return f'{self.name} ({self.id})'
 
@@ -343,6 +346,9 @@ class SchedulePause(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     schedule = models.ForeignKey(Schedule, on_delete=models.SET_DEFAULT, default=None)
+
+    class Meta:
+        ordering = ['start_date', 'end_date']
 
     def __str__(self):
         return f'{self.schedule.name}: {self.start_date} to {self.end_date}'
