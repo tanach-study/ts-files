@@ -342,7 +342,7 @@ class SchedulePause(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     start_date = models.DateField()
     end_date = models.DateField()
-    schedule = models.OneToOneField(Schedule, on_delete=models.SET_DEFAULT, default=None)
+    schedule = models.ForeignKey(Schedule, on_delete=models.SET_DEFAULT, default=None)
 
     def __str__(self):
         return f'{self.schedule.name}: {self.start_date} to {self.end_date}'
