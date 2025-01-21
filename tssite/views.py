@@ -1,9 +1,7 @@
-import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy, Schedule
 from collections import defaultdict
-from hdate import HDate
 
 def index(request):
     return HttpResponse("<a href='/admin'>Click here for admin page</a>")
@@ -144,55 +142,9 @@ def schedules(request):
 
 def schedule(request, schedule_id):
     s = Schedule.objects.filter(id=schedule_id).get()
-    start_date = s.start_date
-    today = datetime.date.today()
-    diff = today - start_date
-
-    classes = Class.objects
-    # show perakim starting with neviim rishonim (division=2)...
-    classes = classes.filter(division_sequence__gte=2)
-    # ...through ketuvim (division=5), inclusive
-    classes = classes.filter(division_sequence__lte=5)
-    # TODO(joey): only show one class if the perek has multiple parts
-    # classes = classes.filter(part='')
-    # introductions should be counted on the same day as chapter 1
-    classes = classes.exclude(unit='0')
-    # only get the number of classes between the start date and today
-    classes = classes[:diff.days]
-
+    date_class_tuples = s.get_classes()
     html = f'<h1>Items for Schedule: {s}</h1>\n<ul>\n'
-    date_iterator = 0
-    class_iterator = 0
-    curr_date = start_date + datetime.timedelta(days=date_iterator)
-
-    schedule_pauses = s.schedulepause_set.all()
-    while curr_date <= today and class_iterator < len(classes):
-        # get the next date to display
-
-        # skip any date in a SchedulePause
-        for pause in schedule_pauses:
-            if pause.start_date == curr_date:
-                pause_dur = pause.end_date - pause.start_date
-                skipped_days = pause_dur.days
-                if skipped_days == 0:
-                    skipped_days = 1
-                date_iterator += skipped_days
-                curr_date = start_date + datetime.timedelta(days=date_iterator)
-
-        # always skip saturdays and yom tov
-        hebrew_date = HDate(curr_date, diaspora=True)
-        if curr_date.weekday() == 5 or hebrew_date.is_yom_tov: # Monday = 0; Sunday = 6
-            date_iterator += 1
-            curr_date = start_date + datetime.timedelta(days=date_iterator)
-            continue
-
-        # output the class with the date
-        c = classes[class_iterator]
-        html += f'<li>Date: {curr_date}; Class: {c}</li>\n'
-
-        date_iterator += 1
-        class_iterator += 1
-        curr_date = start_date + datetime.timedelta(days=date_iterator)
-
+    for dc in date_class_tuples:
+        html += f'<li>Date: {dc[0]}; Class: {dc[1]}</li>\n'
     html += '</ul>\n'
     return HttpResponse(html)

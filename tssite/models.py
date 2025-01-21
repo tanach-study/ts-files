@@ -1,8 +1,10 @@
 import uuid
+import datetime
 from django.db import models
 from .validators import validate_file_extension
 from django.conf import settings
 from tssite import client
+from hdate import HDate
 
 masechetot_by_seder = [
     ('Zeraim', (
@@ -340,6 +342,59 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f'{self.name} ({self.id})'
+
+    def get_classes(self):
+        start_date = self.start_date
+        today = datetime.date.today()
+        diff = today - start_date
+
+        classes = Class.objects
+        # show perakim starting with neviim rishonim (division=2)...
+        classes = classes.filter(division_sequence__gte=2)
+        # ...through ketuvim (division=5), inclusive
+        classes = classes.filter(division_sequence__lte=5)
+        # TODO(joey): only show one class if the perek has multiple parts
+        # classes = classes.filter(part='')
+        # introductions should be counted on the same day as chapter 1
+        classes = classes.exclude(unit='0')
+        # only get the number of classes between the start date and today
+        classes = classes[:diff.days]
+
+        date_iterator = 0
+        class_iterator = 0
+        curr_date = start_date + datetime.timedelta(days=date_iterator)
+
+        schedule_pauses = self.schedulepause_set.all()
+
+        to_return = []
+        while curr_date <= today and class_iterator < len(classes):
+            # get the next date to display
+
+            # skip any date in a SchedulePause
+            for pause in schedule_pauses:
+                if pause.start_date == curr_date:
+                    pause_dur = pause.end_date - pause.start_date
+                    skipped_days = pause_dur.days
+                    if skipped_days == 0:
+                        skipped_days = 1
+                    date_iterator += skipped_days
+                    curr_date = start_date + datetime.timedelta(days=date_iterator)
+
+            # always skip saturdays and yom tov
+            hebrew_date = HDate(curr_date, diaspora=True)
+            if curr_date.weekday() == 5 or hebrew_date.is_yom_tov: # Monday = 0; Sunday = 6
+                date_iterator += 1
+                curr_date = start_date + datetime.timedelta(days=date_iterator)
+                continue
+
+            # output the class with the date
+            to_return.append([curr_date, classes[class_iterator]])
+
+            date_iterator += 1
+            class_iterator += 1
+            curr_date = start_date + datetime.timedelta(days=date_iterator)
+
+        return to_return
 
 class SchedulePause(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
