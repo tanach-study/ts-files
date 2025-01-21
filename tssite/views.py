@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy
+from .models import Class, Teacher, Teamim, TalmudSponsor, TalmudStudy, Schedule
 from collections import defaultdict
-
 
 def index(request):
     return HttpResponse("<a href='/admin'>Click here for admin page</a>")
@@ -132,3 +131,21 @@ def all(request):
           })
     values = [{k: v for k, v in obj.items() if v is not None} for obj in values]
     return JsonResponse(values, safe=False)
+
+
+def schedules(request):
+    html = '<h1>Schedules</h1>\n<ul>\n'
+    for s in Schedule.objects.all():
+        html += f'<li><a href="/schedule/{s.id}">{s.name}</a></li>\n'
+    html += '</ul>\n'
+    return HttpResponse(html)
+
+def schedule(request, schedule_id):
+    s = Schedule.objects.filter(id=schedule_id).get()
+    date_class_tuples = s.get_classes()
+    html = f'<h1>Items for Schedule: {s}</h1>\n<ul>\n'
+    html += f'<a href="/feeds/rss/schedule/{s.id}" target="blank">RSS Feed for this schedule</a><br><br>\n'
+    for dc in date_class_tuples:
+        html += f'<li>Date: {dc[0]}; Class: {dc[1]}</li>\n'
+    html += '</ul>\n'
+    return HttpResponse(html)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Teacher, Teamim, Class, TalmudSponsor, TalmudStudy
+from .models import Teacher, Teamim, Class, TalmudSponsor, TalmudStudy, Schedule, SchedulePause
 from .models import create_transcoder_job
 
 class ClassAdmin(admin.ModelAdmin):
@@ -51,9 +51,19 @@ class TeamimAdmin(admin.ModelAdmin):
                 print('creating encoder job for new object', str(obj))
             create_transcoder_job(obj.audio)
 
+class SchedulePauseInline(admin.TabularInline):
+    model = SchedulePause
+
+class ScheduleAdmin(admin.ModelAdmin):
+    inlines = [
+        SchedulePauseInline,
+    ]
+
 
 admin.site.register(Teacher)
 admin.site.register(Teamim, TeamimAdmin)
 admin.site.register(Class, ClassAdmin)
 admin.site.register(TalmudSponsor)
 admin.site.register(TalmudStudy, TalmudStudyAdmin)
+admin.site.register(Schedule, ScheduleAdmin)
+admin.site.register(SchedulePause)
