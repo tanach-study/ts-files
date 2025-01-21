@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from .validators import validate_file_extension
 from django.conf import settings
@@ -328,3 +329,20 @@ class TalmudStudy(models.Model):
     def get_location(self):
         teacher = str(self.teacher).lower().replace('.', '').replace(' ', '-')
         return f'/talmud-study/dapim/{self.seder}/{self.masechet}/{self.daf}?{teacher}'
+
+class Schedule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=256)
+    start_date = models.DateField()
+
+    def __str__(self):
+        return f'{self.name} ({self.id})'
+
+class SchedulePause(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    schedule = models.OneToOneField(Schedule, on_delete=models.SET_DEFAULT, default=None)
+
+    def __str__(self):
+        return f'{self.schedule.name}: {self.start_date} to {self.end_date}'
