@@ -147,7 +147,6 @@ def schedule(request, schedule_id):
     start_date = s.start_date
     today = datetime.date.today()
     diff = today - start_date
-    print(type(start_date), start_date, diff.days)
 
     classes = Class.objects
     # show perakim starting with neviim rishonim (division=2)...
@@ -167,9 +166,7 @@ def schedule(request, schedule_id):
     curr_date = start_date + datetime.timedelta(days=date_iterator)
 
     schedule_pauses = s.schedulepause_set.all()
-    print("schedule_pauses:", schedule_pauses)
     while curr_date <= today and class_iterator < len(classes):
-        print("curr_date:", curr_date, "date_iterator:", date_iterator, "class_iterator:", class_iterator)
         # get the next date to display
 
         # skip any date in a SchedulePause
@@ -180,7 +177,6 @@ def schedule(request, schedule_id):
                 if skipped_days == 0:
                     skipped_days = 1
                 date_iterator += skipped_days
-                print(f'skipping {skipped_days} days due to pause: {pause}')
                 curr_date = start_date + datetime.timedelta(days=date_iterator)
 
         # always skip saturdays and yom tov
