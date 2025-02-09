@@ -1,0 +1,26 @@
+[project]
+name = "ts-files"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "asgiref==3.8.1",
+    "astral==2.2",
+    "boto3==1.36.2",
+    "botocore==1.36.2",
+    "django==5.1.5",
+    "django-storages==1.14.4",
+    "gunicorn==23.0.0",
+    "hdate==0.11.1",
+    "jmespath==1.0.1",
+    "packaging==24.2",
+    "psycopg2==2.9.10",
+    "python-dateutil==2.9.0.post0",
+    "python-dotenv==1.0.1",
+    "pytz==2024.2",
+    "s3transfer==0.11.1",
+    "six==1.17.0",
+    "sqlparse==0.5.3",
+    "urllib3==2.3.0",
+]
