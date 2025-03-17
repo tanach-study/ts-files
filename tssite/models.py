@@ -382,7 +382,15 @@ class Schedule(models.Model):
 
             # always skip saturdays and yom tov
             hebrew_date = HDate(curr_date, diaspora=True)
-            if curr_date.weekday() == 5 or hebrew_date.is_yom_tov: # Monday = 0; Sunday = 6
+            skip_date = False
+            if curr_date.weekday() == 5: # Monday = 0; Sunday = 6
+                skip_date = True
+            if hebrew_date.is_yom_tov:
+                skip_date = True
+            if hebrew_date.is_holiday and hebrew_date.holiday_name in ('purim', 'tisha_bav'):
+                skip_date = True
+
+            if skip_date:
                 date_iterator += 1
                 curr_date = start_date + datetime.timedelta(days=date_iterator)
                 continue
