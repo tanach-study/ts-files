@@ -14,9 +14,21 @@ class RSSNachFeed(Feed):
     author_email = "info@tanachstudy.com"
 
     def items(self):
-        return Class.objects.filter(
-            Q(division='neviim_rishonim') | Q(division='neviim_aharonim') | Q(division='tere_assar') | Q(division='ketuvim')
-        ).order_by('division_sequence', 'section_sequence', 'unit_sequence', 'part_sequence').order_by('date')
+        return (
+            Class.objects.filter(
+                Q(division="neviim_rishonim")
+                | Q(division="neviim_aharonim")
+                | Q(division="tere_assar")
+                | Q(division="ketuvim")
+            )
+            .order_by(
+                "division_sequence",
+                "section_sequence",
+                "unit_sequence",
+                "part_sequence",
+            )
+            .order_by("date")
+        )
 
     def item_title(self, item):
         return str(item)
@@ -47,8 +59,8 @@ class RSSNachFeed(Feed):
         return f'{description}<br /><audio controls=""><source src="https://cdn.tanachstudy.com/{item.audio}"></audio>'
 
     def item_link(self, item):
-        host = 'https://tanachstudy.com'
-        return f'{host}{item.get_location()}'
+        host = "https://tanachstudy.com"
+        return f"{host}{item.get_location()}"
 
     def item_enclosure_length(self, item):
         # TODO(joey): figure out how to set this properly

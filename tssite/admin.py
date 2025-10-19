@@ -14,8 +14,17 @@ from .models import (
 
 
 class ClassAdmin(admin.ModelAdmin):
-    search_fields = ['division', 'segment', 'section', 'unit', 'part', 'series']
-    list_display = ['__str__', 'division', 'segment', 'section', 'unit', 'part', 'series', 'date']
+    search_fields = ["division", "segment", "section", "unit", "part", "series"]
+    list_display = [
+        "__str__",
+        "division",
+        "segment",
+        "section",
+        "unit",
+        "part",
+        "series",
+        "date",
+    ]
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -25,13 +34,13 @@ class ClassAdmin(admin.ModelAdmin):
             for key in form.initial:
                 if form.initial[key] != form.cleaned_data[key]:
                     update_fields.append(key)
-            if 'audio' in update_fields:
-                print('creating encoder job for', str(obj))
+            if "audio" in update_fields:
+                print("creating encoder job for", str(obj))
                 create_transcoder_job(obj.audio)
 
 
 class TalmudStudyAdmin(admin.ModelAdmin):
-    search_fields=['seder', 'masechet']
+    search_fields = ["seder", "masechet"]
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -41,27 +50,35 @@ class TalmudStudyAdmin(admin.ModelAdmin):
             for key in form.initial:
                 if form.initial[key] != form.cleaned_data[key]:
                     update_fields.append(key)
-            if 'audio' in update_fields:
-                print('creating encoder job for', str(obj))
+            if "audio" in update_fields:
+                print("creating encoder job for", str(obj))
                 create_transcoder_job(obj.audio)
 
 
 class TeamimAdmin(admin.ModelAdmin):
-    search_fields = ['post', 'reader']
-    raw_id_fields = ('post', 'reader',)
-    list_display = ('post', 'reader',)
+    search_fields = ["post", "reader"]
+    raw_id_fields = (
+        "post",
+        "reader",
+    )
+    list_display = (
+        "post",
+        "reader",
+    )
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        if 'audio' in form.changed_data and obj.audio:
+        if "audio" in form.changed_data and obj.audio:
             if change:
-                print('creating encoder job for existing object', str(obj))
+                print("creating encoder job for existing object", str(obj))
             else:
-                print('creating encoder job for new object', str(obj))
+                print("creating encoder job for new object", str(obj))
             create_transcoder_job(obj.audio)
+
 
 class SchedulePauseInline(admin.TabularInline):
     model = SchedulePause
+
 
 class ScheduleAdmin(admin.ModelAdmin):
     inlines = [

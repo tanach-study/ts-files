@@ -28,6 +28,7 @@ dependencies = [
 [tool.ruff]
 target-version = "py313"
 line-length = 88
+extend-exclude = ["tssite/migrations"]
 
 [tool.ruff.lint]
 select = [
