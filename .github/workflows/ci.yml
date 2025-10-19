@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  lint-and-migrate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+        
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        version: "latest"
+        enable-cache: true
+
+    - name: "Set up Python"
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: ".python-version"
+        
+    - name: Install dependencies
+      run: uv sync --locked --all-extras --dev
+      
+    - name: Run Ruff linting
+      run: uv run --offline ruff check .
+      
+    - name: Run Ruff formatting check
+      run: uv run --offline ruff format --check .
+      
+    - name: Set environment variables
+      run: |
+        echo "DJANGO_SETTINGS_MODULE=tsAdmin.settings" >> $GITHUB_ENV
+        
+    - name: Run Django migration check
+      run: uv run --offline python manage.py makemigrations --check --dry-run
+      
+    - name: Apply migrations
+      run: uv run --offline python manage.py migrate
