@@ -1,11 +1,11 @@
 from django.urls import path
 
+from tssite.feeds.all import AtomAllFeed, RSSAllFeed
+from tssite.feeds.nach import AtomNachFeed, PodcastNachFeed, RSSNachFeed
+from tssite.feeds.schedule import ScheduleFeed
+from tssite.feeds.talmud import AtomTalmudFeed, RSSTalmudFeed
 
 from . import views
-from tssite.feeds.nach import RSSNachFeed, AtomNachFeed, PodcastNachFeed
-from tssite.feeds.talmud import RSSTalmudFeed, AtomTalmudFeed
-from tssite.feeds.all import RSSAllFeed, AtomAllFeed
-from tssite.feeds.schedule import ScheduleFeed
 
 urlpatterns = [
     path('', views.index, name='index'),

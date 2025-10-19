@@ -1,5 +1,6 @@
 from django.utils.feedgenerator import Rss201rev2Feed
 
+
 class iTunesFeed(Rss201rev2Feed):
     def rss_attributes(self):
         return {

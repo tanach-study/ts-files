@@ -1,8 +1,10 @@
 from django.contrib.syndication.views import Feed
-from django.utils.feedgenerator import Atom1Feed
 from django.db.models import Q
-from tssite.models import Class
+from django.utils.feedgenerator import Atom1Feed
+
 from tssite.feeds.itunes import iTunesFeed
+from tssite.models import Class
+
 
 class RSSNachFeed(Feed):
     title = "Tanach Study"

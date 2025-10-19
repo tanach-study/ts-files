@@ -1,6 +1,9 @@
 import datetime
+
 from django.contrib.syndication.views import Feed
+
 from tssite.models import Schedule
+
 
 class ScheduleFeed(Feed):
     def get_object(self, request, schedule_id):

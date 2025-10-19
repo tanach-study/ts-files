@@ -1,8 +1,9 @@
 import datetime
+
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
-from django.db.models import Q
-from tssite.models import TalmudStudy, Class
+
+from tssite.models import Class, TalmudStudy
 
 
 class RSSAllFeed(Feed):
@@ -103,7 +104,7 @@ class RSSAllFeed(Feed):
 
         elif tup[0] == 'mishna':
             class_title = item.part_title
-            description = f'In Loving Memory of Mr. Ovadia Buddy Sutton A"H<br />'
+            description = 'In Loving Memory of Mr. Ovadia Buddy Sutton A"H<br />'
             description = f'{description}<br />Seder {item.segment_title}'
             if item.segment_sponsor:
                 description = f'{description}<br />{item.segment_sponsor}'

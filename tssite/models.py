@@ -1,10 +1,13 @@
-import uuid
 import datetime
-from django.db import models
-from .validators import validate_file_extension
+import uuid
+
 from django.conf import settings
-from tssite import client
+from django.db import models
 from hdate import HDate
+
+from tssite import client
+
+from .validators import validate_file_extension
 
 masechetot_by_seder = [
     ('Zeraim', (
@@ -29,8 +32,8 @@ class Teacher(models.Model):
 
     def __str__(self):
         if self.mname:
-            return '{} {} {} {}'.format(self.title, self.fname, self.mname, self.lname)
-        return '{} {} {}'.format(self.title, self.fname, self.lname)
+            return f'{self.title} {self.fname} {self.mname} {self.lname}'
+        return f'{self.title} {self.fname} {self.lname}'
 
     @property
     def teacher_string(self):
@@ -68,7 +71,7 @@ def get_class_audio_location(instance, filename):
             base = 'archives/Tere Asar'
 
         file = ''
-        if instance.part is not None and instance.part is not '':
+        if instance.part is not None and instance.part != '':
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
@@ -77,7 +80,7 @@ def get_class_audio_location(instance, filename):
     elif instance.division == 'ketuvim':
         base = 'archives/Ketuvim'
         file = ''
-        if instance.part is not None and instance.part is not '':
+        if instance.part is not None and instance.part != '':
             file = f'{instance.section}-{instance.unit}{instance.part}'
         else:
             file = f'{instance.section}-{instance.unit}'
@@ -86,7 +89,7 @@ def get_class_audio_location(instance, filename):
     elif instance.division == 'parasha':
         base = 'archives/parasha'
         common = f'{base}/{instance.segment}/{instance.segment}-{instance.section}-{instance.unit}'
-        if instance.series is not None and instance.series is not 'first':
+        if instance.series is not None and instance.series != 'first':
             path = f'{common}-{instance.series}-{instance.teacher.teacher_string}.mp3'
         else:
             path = f'{common}-{instance.teacher.teacher_string}.mp3'
@@ -235,7 +238,7 @@ def get_teamim_audio_location(instance, filename):
             base = 'archives/Tere Asar'
 
         file = ''
-        if instance.post.part is not None and instance.post.part is not '':
+        if instance.post.part is not None and instance.post.part != '':
             file = f'{instance.post.section}-{instance.post.unit}{instance.post.part}'
         else:
             file = f'{instance.post.section}-{instance.post.unit}'
@@ -244,7 +247,7 @@ def get_teamim_audio_location(instance, filename):
     elif instance.post.division == 'ketuvim':
         base = 'archives/Ketuvim'
         file = ''
-        if instance.post.part is not None and instance.post.part is not '':
+        if instance.post.part is not None and instance.post.part != '':
             file = f'{instance.post.section}-{instance.post.unit}{instance.post.part}'
         else:
             file = f'{instance.post.section}-{instance.post.unit}'
