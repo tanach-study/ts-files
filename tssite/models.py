@@ -16,6 +16,7 @@ masechetot_by_seder = [
 
 
 class Teacher(models.Model):
+    id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=20)
     fname = models.CharField(max_length=40)
     mname = models.CharField(max_length=10, default=None, null=True, blank=True)
@@ -119,6 +120,7 @@ def create_transcoder_job(audio_field):
 
 
 class Class(models.Model):
+    id = models.BigAutoField(primary_key=True)
     division = models.CharField(max_length=256)
     division_name = models.CharField(max_length=256, null=True, blank=True)
     division_title = models.CharField(max_length=256, null=True, blank=True)
@@ -287,6 +289,7 @@ def get_teamim_audio_location(instance, filename):
 
 
 class Teamim(models.Model):
+    id = models.BigAutoField(primary_key=True)
     reader = models.ForeignKey(
         Teacher, on_delete=models.SET_DEFAULT, default=None, null=True, blank=True
     )
@@ -315,6 +318,7 @@ class ShasSedarim(models.TextChoices):
 
 
 class TalmudSponsor(models.Model):
+    id = models.BigAutoField(primary_key=True)
     line_one = models.CharField(max_length=1024)
     line_two = models.CharField(max_length=1024, blank=True, null=True)
     line_three = models.CharField(max_length=1024, blank=True, null=True)
@@ -338,6 +342,7 @@ def get_talmud_audio_location(instance, filename):
 
 
 class TalmudStudy(models.Model):
+    id = models.BigAutoField(primary_key=True)
     MASECHET_CHOICES = masechetot_by_seder
 
     seder = models.CharField(max_length=12, choices=ShasSedarim.choices)
