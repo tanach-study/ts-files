@@ -28,17 +28,17 @@ jobs:
       run: uv add --dev ruff
       
     - name: Run Ruff linting
-      run: uv run ruff check .
+      run: uv run --offline ruff check .
       
     - name: Run Ruff formatting check
-      run: uv run ruff format --check .
+      run: uv run --offline ruff format --check .
       
     - name: Set environment variables
       run: |
         echo "DJANGO_SETTINGS_MODULE=tsAdmin.settings" >> $GITHUB_ENV
         
     - name: Run Django migration check
-      run: uv run python manage.py makemigrations --check --dry-run
+      run: uv run --offline python manage.py makemigrations --check --dry-run
       
     - name: Run Django migration check (with existing migrations)
-      run: uv run python manage.py migrate --check
+      run: uv run --offline python manage.py migrate --check
