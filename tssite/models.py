@@ -456,7 +456,10 @@ class Schedule(models.Model):
                 skip_date = True
             if hebrew_date.is_yom_tov:
                 skip_date = True
-            if hebrew_date.is_holiday and hebrew_date.holiday_name in ('purim', 'tisha_bav'):
+            if hebrew_date.is_holiday and hebrew_date.holiday_name in (
+                "purim",
+                "tisha_bav",
+            ):
                 skip_date = True
 
             if skip_date:

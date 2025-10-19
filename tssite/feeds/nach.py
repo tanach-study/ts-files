@@ -40,21 +40,21 @@ class RSSNachFeed(Feed):
         return item.teacher.__str__()
 
     def item_description(self, item):
-        description = ''
-        class_title = ''
+        description = ""
+        class_title = ""
         if item.division_sequence >= 2 or item.division_sequence <= 5:
             class_title = item.unit_title
-            description = f'Sefer {item.section_title}'
+            description = f"Sefer {item.section_title}"
             if item.section_sponsor:
-                description = f'{description}<br />{item.section_sponsor}'
+                description = f"{description}<br />{item.section_sponsor}"
 
-            description = f'{description}<br />Perek {item.unit}'
+            description = f"{description}<br />Perek {item.unit}"
             if item.unit_sponsor:
-                description = f'{description}<br />{item.unit_sponsor}'
+                description = f"{description}<br />{item.unit_sponsor}"
         else:
-            raise Exception(f'unsupported division {item.division}')
+            raise Exception(f"unsupported division {item.division}")
 
-        if class_title != '':
+        if class_title != "":
             return f'<b>{class_title}</b><br />{description}<br /><audio controls=""><source src="https://cdn.tanachstudy.com/{item.audio}"></audio>'
         return f'{description}<br /><audio controls=""><source src="https://cdn.tanachstudy.com/{item.audio}"></audio>'
 
@@ -70,7 +70,7 @@ class RSSNachFeed(Feed):
         return "https://cdn.tanachstudy.com/" + str(item.audio)
 
     def item_enclosure_mime_type(self, item):
-        return 'audio/mp3'
+        return "audio/mp3"
 
 
 class AtomNachFeed(RSSNachFeed):
@@ -85,7 +85,7 @@ class PodcastNachFeed(AtomNachFeed):
 
     def feed_extra_kwargs(self, obj):
         return {
-            'itunes_image_url': 'https://cdn.tanachstudy.com/assets/images/ts-podcast.jpg',
-            'itunes_explicit': False,
-            'itunes_categories': (('Religion & Spirituality', 'Judaism'), 'Education'),
+            "itunes_image_url": "https://cdn.tanachstudy.com/assets/images/ts-podcast.jpg",
+            "itunes_explicit": False,
+            "itunes_categories": (("Religion & Spirituality", "Judaism"), "Education"),
         }
