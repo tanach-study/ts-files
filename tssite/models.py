@@ -192,7 +192,7 @@ class Class(models.Model):
 
 
     def __str__(self):
-        audio = get_class_audio_location(self, '')
+        # audio = get_class_audio_location(self, '')
         toreturn = ''
 
         if self.division == 'torah':

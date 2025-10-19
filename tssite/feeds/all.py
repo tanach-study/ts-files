@@ -50,13 +50,13 @@ class RSSAllFeed(Feed):
     def item_description(self, tup):
         description = ''
         item = tup[1]
-        title = str(item)
-        teacher = str(item.teacher)
+        # title = str(item)
+        # teacher = str(item.teacher)
         class_title = ''
         if tup[0] == 'talmud':
             seder = item.seder.title()
             masechet = item.masechet.title()
-            link = item.get_location()
+            # link = item.get_location()
             seder_sponsor = '' if not item.seder_sponsor else item.seder_sponsor
             masechet_sponsor = '' if not item.masechet_sponsor else item.masechet_sponsor
             daf_sponsor = '' if not item.daf_sponsor else item.daf_sponsor

@@ -23,7 +23,7 @@ class RSSTalmudFeed(Feed):
         seder = item.seder.title()
         masechet = item.masechet.title()
         teacher = str(item.teacher)
-        link = item.get_location()
+        # link = item.get_location()
         seder_sponsor = '' if not item.seder_sponsor else item.seder_sponsor
         masechet_sponsor = '' if not item.masechet_sponsor else item.masechet_sponsor
         daf_sponsor = '' if not item.daf_sponsor else item.daf_sponsor
