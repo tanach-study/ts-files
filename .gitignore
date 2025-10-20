@@ -30,3 +30,5 @@ yarn-debug.log*
 venv/
 
 sftp-config.json
+
+.ruff_cache/

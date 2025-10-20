@@ -9,7 +9,7 @@ dependencies = [
     "astral==2.2",
     "boto3==1.36.2",
     "botocore==1.36.2",
-    "django==5.1.5",
+    "django==5.1.7",
     "django-storages==1.14.4",
     "gunicorn==23.0.0",
     "hdate==0.11.1",
