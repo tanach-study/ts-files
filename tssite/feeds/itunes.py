@@ -8,6 +8,7 @@ class iTunesFeed(Rss201rev2Feed):
             "xmlns:atom": "http://www.w3.org/2005/Atom",
             "xmlns:itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
             "xmlns:content": "http://purl.org/rss/1.0/modules/content/",
+            "xmlns:podcast": "https://podcastindex.org/namespace/1.0",
         }
 
     def add_root_elements(self, handler):

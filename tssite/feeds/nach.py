@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
 from django.utils.feedgenerator import Atom1Feed
@@ -34,7 +36,7 @@ class RSSNachFeed(Feed):
         return str(item)
 
     def item_pubdate(self, item):
-        return item.date
+        return item.date or datetime.now()
 
     def item_author_name(self, item):
         return item.teacher.__str__()
@@ -64,7 +66,7 @@ class RSSNachFeed(Feed):
 
     def item_enclosure_length(self, item):
         # TODO(joey): figure out how to set this properly
-        return 0
+        return 123
 
     def item_enclosure_url(self, item):
         return "https://cdn.tanachstudy.com/" + str(item.audio)
